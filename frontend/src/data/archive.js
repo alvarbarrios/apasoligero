@@ -3,7 +3,7 @@ import data from "./archive.json";
 export default data;
 
 export const HIMNOS_META = {
-  espana: { short: "España", code: "ESP", emblem: null },
+  espana: { short: "España", code: "ESP", emblem: "/assets/img/espana.svg" },
   tierra: { short: "Ejército de Tierra", code: "ET", emblem: "/assets/img/et.png" },
   armada: { short: "Armada Española", code: "ARM", emblem: "/assets/img/ae.gif" },
   aire: { short: "Ejército del Aire", code: "EA", emblem: "/assets/img/ea.PNG" },

@@ -1,35 +1,36 @@
 import { useState } from "react";
-import { Toaster, toast } from "sonner";
-import { Send, Mail } from "lucide-react";
+import axios from "axios";
+import { toast } from "sonner";
+import { Send, Mail, Loader2, CheckCircle2 } from "lucide-react";
 import PageHeader from "@/components/PageHeader";
 import Reveal from "@/components/Reveal";
 import useTitle from "@/hooks/useTitle";
 import data from "@/data/archive";
 
 const TEMAS = ["Pedir Canción", "Enviar Canción", "Sugerencia", "Otros"];
+const API = process.env.REACT_APP_BACKEND_URL;
+const EMPTY = { tema: "Pedir Canción", asunto: "", nota: "", nombre: "", email: "", tel: "", uco: "", website: "" };
 
 export default function Contacto() {
   useTitle("Contacto");
-  const [form, setForm] = useState({ tema: "Pedir Canción", asunto: "", nota: "", nombre: "", email: "", tel: "", uco: "" });
+  const [form, setForm] = useState(EMPTY);
+  const [status, setStatus] = useState("idle"); // idle | sending | sent
   const set = (k) => (e) => setForm({ ...form, [k]: e.target.value });
 
-  const submit = (e) => {
+  const submit = async (e) => {
     e.preventDefault();
-    const subject = `[A Paso Ligero] ${form.tema}: ${form.asunto || "Sin asunto"}`;
-    const body = [
-      `Tema: ${form.tema}`,
-      `Asunto: ${form.asunto}`,
-      "",
-      form.nota,
-      "",
-      "—",
-      `Nombre: ${form.nombre}`,
-      `E-mail: ${form.email}`,
-      `Tel: ${form.tel}`,
-      `UCO: ${form.uco}`,
-    ].join("\n");
-    window.location.href = `mailto:${data.meta.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    toast.success("Se abrirá su cliente de correo con el mensaje preparado.");
+    if (form.asunto.trim().length < 2) return toast.error("Indique un asunto (mínimo 2 caracteres).");
+    if (form.nota.trim().length < 5) return toast.error("Escriba su nota (mínimo 5 caracteres).");
+    setStatus("sending");
+    try {
+      await axios.post(`${API}/api/contact`, { ...form, email: form.email.trim() || null });
+      setStatus("sent");
+      toast.success("Transmisión enviada. El autor la recibirá en su correo.");
+    } catch (err) {
+      setStatus("idle");
+      const detail = err.response?.data?.detail;
+      toast.error(typeof detail === "string" ? detail : "No se pudo enviar. Use el enlace de correo directo.");
+    }
   };
 
   const inputCls =
@@ -38,7 +39,6 @@ export default function Contacto() {
 
   return (
     <div data-testid="contacto-page">
-      <Toaster theme="dark" position="bottom-right" />
       <PageHeader
         eyebrow="Transmisión // Canal directo con el autor"
         title="El Autor — Info de Contacto"
@@ -94,6 +94,23 @@ export default function Contacto() {
           <form onSubmit={submit} className="relative border border-olive-600/70 bg-olive-950 p-6 sm:p-8" data-testid="contact-form">
             <span className="absolute left-0 top-0 h-5 w-5 border-l-2 border-t-2 border-brass" />
             <span className="absolute bottom-0 right-0 h-5 w-5 border-b-2 border-r-2 border-brass" />
+            {status === "sent" ? (
+              <div className="py-10 text-center" data-testid="contact-success">
+                <CheckCircle2 size={36} className="mx-auto text-brass" />
+                <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.3em] text-brass">Transmisión recibida</p>
+                <h2 className="mt-2 font-display text-2xl font-extrabold uppercase tracking-tight text-parchment">Mensaje enviado</h2>
+                <p className="mt-3 text-sm text-sage">Su nota ha llegado al buzón del autor. Si dejó su e-mail, podrá responderle directamente.</p>
+                <button
+                  type="button"
+                  onClick={() => { setForm(EMPTY); setStatus("idle"); }}
+                  data-testid="contact-send-another"
+                  className="mt-6 border border-olive-500 px-5 py-2.5 font-mono text-[11px] uppercase tracking-[0.2em] text-sage transition-colors hover:border-brass hover:text-brass"
+                >
+                  Enviar otra transmisión
+                </button>
+              </div>
+            ) : (
+            <>
             <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-brass">Para contactar conmigo…</p>
             <h2 className="mt-2 font-display text-2xl font-extrabold uppercase tracking-tight text-parchment">
               Formulario de Transmisión
@@ -120,12 +137,23 @@ export default function Contacto() {
             </div>
             <div className="mt-5">
               <label className={labelCls} htmlFor="asunto">Asunto</label>
-              <input id="asunto" value={form.asunto} onChange={set("asunto")} className={inputCls} data-testid="input-asunto" />
+              <input id="asunto" value={form.asunto} onChange={set("asunto")} className={inputCls} data-testid="input-asunto" required minLength={2} maxLength={150} />
             </div>
             <div className="mt-5">
               <label className={labelCls} htmlFor="nota">Tu Nota</label>
-              <textarea id="nota" rows={5} value={form.nota} onChange={set("nota")} className={inputCls} data-testid="input-nota" />
+              <textarea id="nota" rows={5} value={form.nota} onChange={set("nota")} className={inputCls} data-testid="input-nota" required minLength={5} maxLength={5000} />
             </div>
+            <input
+              type="text"
+              name="website"
+              value={form.website}
+              onChange={set("website")}
+              tabIndex={-1}
+              autoComplete="off"
+              aria-hidden="true"
+              className="absolute -left-[9999px] h-0 w-0 opacity-0"
+              data-testid="input-honeypot"
+            />
             <p className="mt-6 font-mono text-[10px] uppercase tracking-[0.25em] text-khaki">Si quieres que te contacte…</p>
             <div className="mt-3 grid gap-4 sm:grid-cols-2">
               <div>
@@ -147,11 +175,18 @@ export default function Contacto() {
             </div>
             <button
               type="submit"
+              disabled={status === "sending"}
               data-testid="contact-submit"
-              className="mt-7 flex w-full items-center justify-center gap-2 bg-brass px-6 py-3.5 font-mono text-xs uppercase tracking-[0.25em] text-obsidian transition-colors hover:bg-parchment"
+              className="mt-7 flex w-full items-center justify-center gap-2 bg-brass px-6 py-3.5 font-mono text-xs uppercase tracking-[0.25em] text-obsidian transition-colors hover:bg-parchment disabled:opacity-60"
             >
-              <Send size={14} /> Enviar transmisión
+              {status === "sending" ? <Loader2 size={14} className="animate-spin" /> : <Send size={14} />}
+              {status === "sending" ? "Transmitiendo…" : "Enviar transmisión"}
             </button>
+            <p className="mt-3 font-mono text-[9px] uppercase tracking-[0.2em] text-khaki">
+              El mensaje se entrega directamente al buzón del autor.
+            </p>
+            </>
+            )}
           </form>
         </Reveal>
       </div>

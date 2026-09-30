@@ -2,6 +2,7 @@ import { Download } from "lucide-react";
 import PageHeader from "@/components/PageHeader";
 import Reveal from "@/components/Reveal";
 import AudioButton from "@/components/AudioButton";
+import QueueButton from "@/components/QueueButton";
 import useTitle from "@/hooks/useTitle";
 import data from "@/data/archive";
 
@@ -50,6 +51,7 @@ export default function Corneta() {
                       <Download size={15} />
                     </a>
                     <AudioButton file={c.file} title={`Toque de ${c.name}`} sub="Toques de Corneta" size="sm" testid={`toque-play-${i}`} />
+                    <QueueButton file={c.file} title={`Toque de ${c.name}`} sub="Toques de Corneta" testid={`toque-queue-${i}`} />
                   </div>
                 ) : (
                   <span className="shrink-0 border border-olive-600 px-2 py-1 font-mono text-[9px] uppercase tracking-widest text-khaki" data-testid={`toque-noaudio-${i}`}>

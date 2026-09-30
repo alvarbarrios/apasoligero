@@ -2,6 +2,7 @@ import { Link, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight, Download, FileAudio, ChevronRight } from "lucide-react";
 import AudioButton from "@/components/AudioButton";
+import QueueButton from "@/components/QueueButton";
 import CornetaMark from "@/components/CornetaMark";
 import useTitle from "@/hooks/useTitle";
 import NotFound from "@/pages/NotFound";
@@ -108,6 +109,7 @@ export default function SongDetail({ section, base, crumb }) {
                   {song.audios.map((a, i) => (
                     <div key={i} className="flex items-center gap-3" data-testid={`song-audio-${i}`}>
                       <AudioButton file={a.file} title={song.title} sub={crumb} testid={`song-play-${i}`} />
+                      <QueueButton file={a.file} title={song.title} sub={crumb} size="md" testid={`song-queue-${i}`} />
                       <div className="min-w-0 flex-1">
                         <p className="truncate font-mono text-[10px] uppercase tracking-widest text-sage">{a.label}</p>
                         <a

@@ -1,14 +1,19 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { Search, Download, ArrowRight } from "lucide-react";
+import { Search, Download, ArrowRight, ListMusic } from "lucide-react";
 import PageHeader from "@/components/PageHeader";
 import Reveal from "@/components/Reveal";
 import AudioButton from "@/components/AudioButton";
+import QueueButton from "@/components/QueueButton";
 import useTitle from "@/hooks/useTitle";
+import { usePlayer } from "@/context/PlayerContext";
 import data from "@/data/archive";
+
+const SUB = "Archivo de Audio";
 
 export default function Audios() {
   useTitle("Archivo de Audio");
+  const { playAll } = usePlayer();
   const [q, setQ] = useState("");
   const items = useMemo(() => {
     const t = q.trim().toLowerCase();
@@ -40,16 +45,26 @@ export default function Audios() {
           <p className="font-mono text-xs uppercase tracking-[0.25em] text-khaki" data-testid="list-count">
             Archivos · {items.length} / {data.audios.items.length}
           </p>
-          <label className="flex items-center gap-2 border border-olive-600 bg-olive-950 px-3 py-2">
-            <Search size={14} className="text-khaki" />
-            <input
-              value={q}
-              onChange={(e) => setQ(e.target.value)}
-              placeholder="Buscar audio…"
-              data-testid="audio-search-input"
-              className="w-48 bg-transparent font-mono text-xs uppercase tracking-widest text-parchment placeholder:text-khaki/60 focus:outline-none sm:w-64"
-            />
-          </label>
+          <div className="flex flex-wrap items-center gap-3">
+            <button
+              onClick={() => playAll(items.map((a) => ({ file: a.file, title: a.title, sub: SUB })))}
+              disabled={items.length === 0}
+              data-testid="audios-play-all"
+              className="flex items-center gap-2 border border-brass bg-brass/10 px-4 py-2 font-mono text-[11px] uppercase tracking-[0.2em] text-brass transition-colors hover:bg-brass hover:text-obsidian disabled:opacity-40"
+            >
+              <ListMusic size={13} /> Reproducir todo
+            </button>
+            <label className="flex items-center gap-2 border border-olive-600 bg-olive-950 px-3 py-2">
+              <Search size={14} className="text-khaki" />
+              <input
+                value={q}
+                onChange={(e) => setQ(e.target.value)}
+                placeholder="Buscar audio…"
+                data-testid="audio-search-input"
+                className="w-48 bg-transparent font-mono text-xs uppercase tracking-widest text-parchment placeholder:text-khaki/60 focus:outline-none sm:w-64"
+              />
+            </label>
+          </div>
         </div>
         <div className="mt-6 divide-y divide-olive-600/50 border border-olive-600/70">
           {items.map((a, i) => (
@@ -58,7 +73,8 @@ export default function Audios() {
                 <span className="hidden w-8 shrink-0 font-mono text-[10px] tracking-widest text-khaki sm:block">
                   {String(i + 1).padStart(2, "0")}
                 </span>
-                <AudioButton file={a.file} title={a.title} sub="Archivo de Audio" size="sm" testid={`audio-play-${i}`} />
+                <AudioButton file={a.file} title={a.title} sub={SUB} size="sm" testid={`audio-play-${i}`} />
+                <QueueButton file={a.file} title={a.title} sub={SUB} testid={`audio-queue-${i}`} />
                 <span className="min-w-0 flex-1 truncate font-display text-lg font-bold uppercase tracking-wide text-sage transition-colors group-hover:text-brass">
                   {a.title}
                 </span>

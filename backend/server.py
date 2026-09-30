@@ -66,6 +66,12 @@ async def get_status_checks():
     
     return status_checks
 
+from routes.contact import router as contact_router  # noqa: E402
+from routes.guestbook import make_router as make_guestbook_router  # noqa: E402
+
+api_router.include_router(contact_router)
+api_router.include_router(make_guestbook_router(db))
+
 # Include the router in the main app
 app.include_router(api_router)
 

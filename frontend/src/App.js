@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import Lenis from "lenis";
+import { Toaster } from "sonner";
 import "@/App.css";
 import { PlayerProvider } from "@/context/PlayerContext";
 import Header from "@/components/Header";
@@ -79,6 +80,14 @@ function Shell() {
       </main>
       <Footer />
       <PlayerBar />
+      <Toaster
+        theme="dark"
+        position="bottom-right"
+        offset={88}
+        toastOptions={{
+          style: { background: "#0f150f", border: "1px solid #3a4a36", color: "#F4F5F4", borderRadius: 0, fontFamily: "'JetBrains Mono', monospace", fontSize: 12 },
+        }}
+      />
     </div>
   );
 }
