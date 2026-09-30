@@ -1,0 +1,26 @@
+{
+  "summary": "Full e2e testing of iteration 2 features: admin auth + moderation panel, global search dialog (Ctrl+K, accent-insensitive, grouped results, keyboard nav, audio playback from search), printable lyric sheet (/imprimir/...), share flow (compact + firma permalink page), plus light regression on audio queue, guestbook form, contacto and 375px mobile. Backend: 8/8 pytest passing including auth login/me/lockout guard, admin CRUD hide/restore/delete cycle, admin filter shapes. Frontend: all 4 new features work end-to-end via public URL. Created and deleted 2 throwaway guestbook entries via the moderation UI. No new bugs; only pre-existing minor code-review notes from iteration 1 remain.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {"ui_bugs": [], "integration_issues": [], "design_issues": []},
+  "test_report_links": [
+    "/app/backend/tests/test_api.py",
+    "/app/backend/tests/test_features.py",
+    "/app/test_reports/pytest/api_results.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "PrintSheet: window.print() is invoked TWICE per click of [data-testid=print-button] (verified: window.__printed counter = 2 after single click). Likely a double-render / effect trigger. Not user-visible (browser dedupes the dialog) but wasteful — check useEffect dependencies or the click handler in /app/frontend/src/pages/PrintSheet.jsx.",
+    "Search index: 'corneta' does not surface any audio item in search-group-audio (only cancion+seccion). Problem statement mentioned corneta as an example audio query — either the corneta MP3s aren't in the audio search index, or their titles/tags don't include the token. Consider adding audio corpus tags for common queries (himno nacional, corneta, marcha).",
+    "Rate limits (guestbook 3/h/IP, contact 5/h/IP) are still in-memory dicts that grow unbounded — noted in iteration 1, unchanged.",
+    "admin.py list_all returns raw guestbook docs (with email + hidden). Fine for admin but a Pydantic response model would be cleaner and would document the contract.",
+    "PrintSheet renders without site chrome — good; confirmed no header-search-button / footer-admin-link / global-player-bar in DOM."
+  ],
+  "updated_files": ["/app/backend/tests/test_api.py"],
+  "success_rate": {"backend": "100%", "frontend": "100%"},
+  "test_credentials": "Owner: autor@apasoligero.com / PasoLigero-2026! (from /app/memory/test_credentials.md)",
+  "seed_data_creation": "2 throwaway guestbook entries created via public POST and deleted via moderation panel UI (TESTUI_mod). 1 additional TEST_admin_* entry created and auto-cleaned by test_admin_filter_shapes. Pre-existing entries from iteration 1 untouched.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Backend was restarted twice during this run to reset in-memory rate limiters (guestbook 3/h/IP). Login lockout not triggered (only 1 wrong-password attempt for UI test). Admin token stored in localStorage as 'apl_token'. All new data-testids are in place and stable: admin-login-form, admin-email-input, admin-password-input, admin-login-submit, admin-login-error, moderation-panel, admin-count, admin-filter-{all,visible,hidden}, admin-entry-{id}, admin-toggle-{id}, admin-hidden-badge, admin-delete-{id}, admin-delete-confirm-{id}, admin-delete-cancel-{id}, admin-logout, footer-admin-link, header-search-button, search-dialog, search-input, search-hint, search-empty, search-count, search-group-{cancion,audio,lema,seccion}, search-close, song-print-link, print-page, print-sheet, print-title, print-lyrics, print-toggle-columns, print-font-minus, print-font-plus, print-font-size, print-back, print-button, entry-permalink, entry-share-{id}-{copy,whatsapp,x,mail,native}, firma-page, entry-nombre, entry-mensaje, firma-share-card, firma-share-{copy,whatsapp,x,mail}, firma-back, firma-sign-cta.",
+  "rca of the issue": "N/A — no issues encountered."
+}

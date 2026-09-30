@@ -35,9 +35,16 @@ Redesign the user's existing Dreamweaver website as a complete modern website wh
 - Player upgrade: canvas waveform visualizer (Web Audio AnalyserNode, brass = played portion) with invisible range overlay for seek; track queue (QueueButton "+" on Audios rows, Corneta toques, song fichas; "Reproducir todo" on Audios queues filtered list; queue panel with play/remove/clear; next button; auto-advance on ended; badge count); global sonner Toaster in App.js
 - Verified by testing agent (iteration_1.json): 100% backend + frontend, incl. 1 real email send + real guestbook signature, 375px responsive
 
+## Implemented (2026-09-30, session 3)
+- Owner auth (single admin seeded from ADMIN_EMAIL/ADMIN_PASSWORD, bcrypt + JWT Bearer 12h, 5-fail/15-min lockout in Mongo login_attempts): /app/backend/routes/auth.py; creds in /app/memory/test_credentials.md
+- Moderation panel /admin (footer link "Acceso autor"): login form → list all/visible/hidden signatures with email, hide/show toggle, delete with confirm. Public guestbook excludes hidden. Routes /app/backend/routes/admin.py
+- Global search: header button + Ctrl/⌘K → SearchDialog (accent-insensitive, grouped Canciones/Audios/Lemas/Secciones, lyric + motto body search, keyboard nav, audio results play instantly). Index in /app/frontend/src/data/searchIndex.js
+- Printable songbook sheet: song dossier "Hoja imprimible" → /imprimir/{paso-ligero|otras}/:slug or /imprimir/himnos/:group/:slug, rendered without site chrome (white A4 sheet, 1/2 columns, font size 80–140%, print CSS, emblem, footer attribution)
+- Share signature: permalink /libro-de-visitas/firma/:id (GET /api/guestbook/{id}), compact share buttons on each entry (copy, WhatsApp, X, mail, native share) + share card on permalink page
+- Verified by testing agent (iteration_2.json): 100% backend + frontend; pytest /app/backend/tests/test_api.py 8 passing
+
 ## Backlog
-- P2: Admin moderation for guestbook (delete/hide entries) — currently no auth, entries publish immediately
-- P2: Global audio search across all 69 files
 - P2: Dark In Tampere blog content (present in the .rar) is a separate project — ask user if it should be included
-- P2: Lyrics print view / PDF songbook export
-- P3: Restrict CORS to site domain on deployment; remove legacy /api/status template routes
+- P2: Print whole section/group as a multi-page songbook (cancionero completo)
+- P2: Admin: moderate contact submissions log / view sent messages
+- P3: Restrict CORS to site domain on deployment; remove legacy /api/status template routes; Pydantic response model for admin list

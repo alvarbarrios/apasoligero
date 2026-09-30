@@ -68,11 +68,11 @@ export function buildIndex() {
     }
   }
   for (const a of data.audios.items) {
-    items.push({ type: "audio", id: `audio-${a.file}`, title: a.title, sub: "Archivo de Audio", file: a.file, to: "/audios", n: norm(a.title), body: "" });
+    items.push({ type: "audio", id: `audio-${a.file}`, title: a.title, sub: "Archivo de Audio", file: a.file, to: "/audios", n: norm(a.title), body: norm("archivo de audio mp3") });
   }
   for (const c of data.corneta.calls) {
     if (!c.file) continue;
-    items.push({ type: "audio", id: `toque-${c.file}`, title: `Toque de ${c.name}`, sub: "Toques de Corneta", file: c.file, to: "/canciones/corneta", n: norm(c.name), body: norm(c.desc) });
+    items.push({ type: "audio", id: `toque-${c.file}`, title: `Toque de ${c.name}`, sub: "Toques de Corneta", file: c.file, to: "/canciones/corneta", n: norm(c.name), body: norm(`toque corneta ${c.desc}`) });
   }
   for (const [to, title, sub] of PAGES) {
     items.push({ type: "pagina", id: `page-${to}`, title, sub, to, n: norm(title), body: norm(sub) });

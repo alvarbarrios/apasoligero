@@ -75,5 +75,35 @@ def test_moderation_hide_share_delete(client, token):
     assert all(i["id"] != eid for i in client.get("/api/guestbook", params={"size": 50}).json()["items"])
     lst = client.get("/api/admin/guestbook", params={"filter": "hidden"}, headers=h).json()
     assert any(i["id"] == eid for i in lst["items"])
+    # restore via hidden:false then confirm public visibility
+    assert client.patch(f"/api/admin/guestbook/{eid}", json={"hidden": False}, headers=h).json()["hidden"] is False
+    pub = client.get(f"/api/guestbook/{eid}")
+    assert pub.status_code == 200
+    body = pub.json()
+    assert "email" not in body and "_id" not in body and body["id"] == eid
+    # delete + second delete → 404
     assert client.delete(f"/api/admin/guestbook/{eid}", headers=h).json()["deleted"] is True
     assert client.delete(f"/api/admin/guestbook/{eid}", headers=h).status_code == 404
+
+
+def test_admin_filter_shapes(client, token):
+    h = {"Authorization": f"Bearer {token}"}
+    # Create an entry with email so admin view exposes it
+    name = f"TEST_admin_{uuid.uuid4().hex[:6]}"
+    r = client.post("/api/guestbook", json={"nombre": name, "mensaje": "Admin filter probe.", "email": "probe@example.com"})
+    if r.status_code == 429:
+        pytest.skip("guestbook rate limit reached")
+    eid = r.json()["id"]
+    try:
+        for f in ("all", "visible", "hidden"):
+            resp = client.get("/api/admin/guestbook", params={"filter": f, "size": 50}, headers=h)
+            assert resp.status_code == 200
+            body = resp.json()
+            assert set(["total", "hidden", "items"]).issubset(body.keys())
+        # Find our entry in "all" and confirm admin sees email
+        allb = client.get("/api/admin/guestbook", params={"filter": "all", "size": 100}, headers=h).json()
+        mine = next((i for i in allb["items"] if i["id"] == eid), None)
+        assert mine is not None
+        assert mine.get("email") == "probe@example.com"
+    finally:
+        client.delete(f"/api/admin/guestbook/{eid}", headers=h)
