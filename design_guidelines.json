@@ -1,0 +1,172 @@
+{
+  "project_identity": {
+    "name": "A Paso Ligero",
+    "subtitle": "Archivo Histórico de Música Militar Española",
+    "tagline": "Web de Músicas Militares - Preservando el patrimonio musical de las Fuerzas Armadas",
+    "author": "Álvar Barrios Martínez",
+    "language": "es",
+    "vibe": "Dark Tactical Editorial, Precision Engineering meets Military Heritage Archive"
+  },
+  "archetype_and_theme": {
+    "archetype": "ARCHETYPE 4: SWISS & HIGH-CONTRAST / TACTICAL EDITORIAL",
+    "mode": "dark",
+    "palette_strategy": "Scorched Obsidian (#070907) as primary depth, Deep Olive Drab (#0E130E & #141B14) for surfaces, Brass Gold (#D4A359) and Signal Red (#E53935) for tactical triggers, Crisp White (#F4F5F4) for high-legibility editorial content.",
+    "border_philosophy": "Tactical 1px sharp borders with low-opacity olive/brass (#2A342A / #D4A35933). Zero drop shadows; depth created purely through tonal layering and hair-line grids."
+  },
+  "typography": {
+    "fonts": {
+      "display_heading": "'Barlow Condensed', 'Oswald', sans-serif",
+      "body": "'DM Sans', 'Inter', sans-serif",
+      "tactical_mono": "'JetBrains Mono', 'Fira Code', monospace",
+      "editorial_serif": "'Playfair Display', serif"
+    },
+    "hierarchy": {
+      "h1_hero": "text-4xl sm:text-5xl lg:text-6xl font-black uppercase tracking-tight leading-none",
+      "h2_section": "text-2xl sm:text-3xl lg:text-4xl font-extrabold uppercase tracking-tight",
+      "h3_card": "text-xl sm:text-2xl font-bold uppercase tracking-normal",
+      "h4_sub": "text-lg sm:text-xl font-semibold tracking-wide",
+      "body_lead": "text-base sm:text-lg text-emerald-100/80 leading-relaxed font-normal",
+      "body_standard": "text-sm sm:text-base text-zinc-300 leading-relaxed",
+      "label_tactical": "font-mono text-xs uppercase tracking-[0.2em] text-amber-400/90 font-medium",
+      "meta_data": "font-mono text-xs text-zinc-400 tracking-wider"
+    },
+    "rules": [
+      "Headings MUST use Barlow Condensed or Oswald with uppercase transformation for a military editorial look.",
+      "Overlines, categories, badge labels MUST use JetBrains Mono uppercase with explicit wide tracking (tracking-[0.2em]).",
+      "Body text MUST remain DM Sans or Inter with maximum 65ch width for reading comfort.",
+      "NEVER use raw un-styled Inter for main section headings."
+    ]
+  },
+  "colors": {
+    "background": {
+      "primary": "#070907",
+      "surface_base": "#0B0F0B",
+      "surface_elevated": "#121712",
+      "surface_card": "#171F17",
+      "surface_hover": "#1F291F"
+    },
+    "text": {
+      "primary": "#F4F5F4",
+      "secondary": "#A1ADA1",
+      "muted": "#687568",
+      "accent_gold": "#D4A359",
+      "accent_red": "#EF4444",
+      "accent_green": "#22C55E"
+    },
+    "accents": {
+      "brand_primary": "#D4A359",
+      "brand_secondary": "#B8860B",
+      "tactical_red": "#DC2626",
+      "tactical_green": "#16A34A",
+      "tactical_olive": "#3B4A3B"
+    },
+    "borders": {
+      "subtle": "#1D261D",
+      "medium": "#2D3B2D",
+      "focus": "#D4A359",
+      "hazard": "#EF4444"
+    },
+    "gradient_policy": "STRICT NO GRADIENT OVERLOAD. Surfaces must be solid dark olive/obsidian. Gradients are permitted ONLY as subtle linear 1px hairline glowing borders or dark radial vignette spotlights."
+  },
+  "visual_enhancers": {
+    "textures": [
+      "Subtle noise overlay (opacity: 0.03)",
+      "Tactical crosshair reticles (+) on card corners",
+      "Military stencil chevrons and section index numbers (e.g. SEC_01 // PASO LIGERO)",
+      "Scanline repeating SVG background for high-tech archive hero modules"
+    ],
+    "patterns": [
+      "1px Hairline Grid Pattern (bg-[linear-gradient(to_right,#1b241b_1px,transparent_1px),linear-gradient(to_bottom,#1b241b_1px,transparent_1px)] bg-[size:4rem_4rem])",
+      "Dot Matrix grid for audio player spectrum backdrop"
+    ],
+    "ui_motifs": [
+      "Corner brackets on active cards (`border-t-2 border-l-2 border-amber-400`)",
+      "LED status indicator dots (pulse green for playing audio, amber for archive read)",
+      "Military dossier badge stamps ('REGISTRO MILITAR ESPAÑOL', 'AUDIO MASTER HQ')"
+    ]
+  },
+  "grids_and_layout": {
+    "hero_layout": "Bento Tetris Grid: 12-column high-tension layout with left dominant headline + audio preview card + stats ticker + branch shortcut tiles.",
+    "catalog_layout": "Strict 3-column / 4-column tactical cards for Himnos & Toques, with sticky sidebar filtering by Military Branch (Ejército de Tierra, Armada, Aire, Guardia Civil, UME, etc.).",
+    "lyric_detail_layout": "Split-screen Dossier view: Left sticky column with Audio Player, Branch Emblem, Historic Notes & Download CTA; Right scrolling column with formatted lyrics in high-contrast editorial typography.",
+    "gap_scale": "gap-4 for dense data grids, gap-8 to gap-12 for section boundaries."
+  },
+  "component_specifications": {
+    "navigation_header": {
+      "style": "Sticky Crystal Tactical Nav bar with backdrop blur (backdrop-blur-md bg-[#070907]/90 border-b border-[#1D261D])",
+      "contents": [
+        "Brand Logo: Corneta / Chevron Monogram SVG with 'A PASO LIGERO'",
+        "Nav Links: 'Inicio', 'Canciones', 'Himnos', 'Toques de Corneta', 'Audios', 'Lemas', 'Contacto'",
+        "CTA Button: '¡Aporten!' / Colaborar button with tactical hover glow",
+        "Global Audio Status Indicator Pill (showing current playing track if active)"
+      ]
+    },
+    "hero_section": {
+      "headline": "A PASO LIGERO",
+      "subheadline": "PATRIMONIO DE MÚSICAS Y HIMNOS MILITARES DE ESPAÑA",
+      "description": "Archivo histórico documentado por Álvar Barrios Martínez. Partituras sonoras, marchas de infantería, toques de corneta y lemas de las Fuerzas Armadas.",
+      "features": [
+        "180+ Letras y Grabaciones de Himnos",
+        "30 Toques de Corneta Reglamentarios",
+        "Lemas Históricos en Latín y Español",
+        "Audio HQ Descargable"
+      ]
+    },
+    "audio_player_system": {
+      "type": "Global Persistent Audio Player Bar at bottom + Inline audio player buttons on cards",
+      "features": [
+        "Play / Pause / Progress slider / Time readout / Volume control / Download MP3",
+        "Tactical audio visualizer waveform effect",
+        "Current track metadata display with unit badge emblem"
+      ]
+    },
+    "toques_corneta_list": {
+      "style": "Interactive tactical list with instant inline audio preview, status badge, description of when the call is played, and audio download button."
+    },
+    "lemas_unit_grid": {
+      "style": "Dossier cards showing Unit Name, Branch Badge, Latin Motto in bold gold display font, Spanish translation, and historical context."
+    },
+    "guestbook_and_contact": {
+      "style": "Tactical Transmission Form with input fields (Nombre, Email, Unidad/Afiliación, Mensaje), military stamp style submit button, and author bio section."
+    }
+  },
+  "motion_and_interactions": {
+    "smooth_scroll": "Lenis smooth scroll integration for fluid editorial reading.",
+    "hover_effects": [
+      "Cards: 1px amber glow outline + 2px translate up",
+      "Buttons: Sharp color inversion from dark olive with amber text to gold fill with black text",
+      "Links: Animated tactical underline reveal (left to right)"
+    ],
+    "entrance_animations": "Staggered Framer Motion slide-up (`y: 20 -> 0`, `opacity: 0 -> 1`) with duration 0.4s and easeOut."
+  },
+  "accessibility_and_contrast": {
+    "wcag_level": "APCA & WCAG 2.1 AA Compliant",
+    "contrast_ratios": "Minimum 5:1 for standard body text over #070907, 7:1 for headings.",
+    "focus_states": "ring-2 ring-amber-400 ring-offset-2 ring-offset-[#070907] on all interactives.",
+    "test_ids": "Mandatory data-testid on every interactive button, input, link, tab, player control, and item card."
+  },
+  "image_urls": {
+    "military_band_hero": "https://images.unsplash.com/photo-1668181322625-270898ae9065?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1MDV8MHwxfHNlYXJjaHw0fHxtaWxpdGFyeSUyMGJhbmQlMjBicmFzcyUyMGhvcm4lMjBwYXJhZGV8ZW58MHx8fHwxNzkwNzg3NjAyfDA&ixlib=rb-4.1.0&q=85",
+    "brass_horns_parade": "https://images.unsplash.com/photo-1763656446360-991501414792?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1MDV8MHwxfHNlYXJjaHwyfHxtaWxpdGFyeSUyMGJhbmQlMjBicmFzcyUyMGhvcm4lMjBwYXJhZGV8ZW58MHx8fHwxNzkwNzg3NjAyfDA&ixlib=rb-4.1.0&q=85",
+    "military_gear_texture": "https://images.unsplash.com/photo-1511989130945-c2b632959395?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NjZ8MHwxfHNlYXJjaHw0fHx0YWN0aWNhbCUyMG1pbGl0YXJ5JTIwYXJjaGl2ZSUyMHZpbnRhZ2UlMjB0ZXh0dXJlfGVufDB8fHx8MTc5MDc4NzYwMnww&ixlib=rb-4.1.0&q=85",
+    "vintage_map_archive": "https://images.unsplash.com/photo-1657559220445-4e93906cd43a?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NjZ8MHwxfHNlYXJjaHwzfHx0YWN0aWNhbCUyMG1pbGl0YXJ5JTIwYXJjaGl2ZSUyMHZpbnRhZ2UlMjB0ZXh0dXJlfGVufDB8fHx8MTc5MDc4NzYwMnww&ixlib=rb-4.1.0&q=85"
+  },
+  "instructions_to_main_agent": [
+    "Read this design_guidelines.json completely before modifying any code.",
+    "Maintain all Spanish content, song titles, lyrics, author info, and military category classifications without loss.",
+    "Implement the React frontend in src/ with structured components using standard .js / .jsx extensions.",
+    "Use Tailwind CSS with custom color extensions matching this document (dark tactical greens, scorched obsidian, amber brass).",
+    "Ensure every interactive element has a unique `data-testid` attribute (e.g., data-testid='nav-link-toques', data-testid='audio-play-button-1').",
+    "Build a persistent audio player bar that plays tracks seamlessly while navigating between archive pages or filtering.",
+    "Add search and filter functionality for Himnos, Toques de Corneta, and Lemas to make the vast archive instantly accessible."
+  ],
+  "UNIVERSAL GUIDELINES FOR MAIN AGENT": {
+    "anti_ai_slop_rules": [
+      "DO NOT center-align main paragraph texts or body layout containers; maintain disciplined editorial left alignment.",
+      "DO NOT use generic rounded blue cards or standard Vercel dark mode templates.",
+      "Use sharp or minimal border radius (rounded-none or rounded-sm) for a crisp tactical tool aesthetic.",
+      "Incorporate micro-animations on hover, active states, and page transitions.",
+      "Ensure text contrast adheres to APCA standards with strong visibility on dark tactical surfaces."
+    ]
+  }
+}

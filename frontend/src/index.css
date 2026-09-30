@@ -1,0 +1,188 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        --background: 120 13% 3%;
+        --foreground: 120 5% 96%;
+        --card: 120 13% 5%;
+        --card-foreground: 120 5% 96%;
+        --popover: 120 13% 5%;
+        --popover-foreground: 120 5% 96%;
+        --primary: 36 58% 58%;
+        --primary-foreground: 120 13% 4%;
+        --secondary: 110 16% 10%;
+        --secondary-foreground: 120 5% 96%;
+        --muted: 110 16% 10%;
+        --muted-foreground: 110 8% 56%;
+        --accent: 36 58% 58%;
+        --accent-foreground: 120 13% 4%;
+        --destructive: 0 72% 51%;
+        --destructive-foreground: 0 0% 98%;
+        --border: 115 14% 13%;
+        --input: 115 14% 13%;
+        --ring: 36 58% 58%;
+        --radius: 0.125rem;
+    }
+}
+
+@layer base {
+    * {
+        @apply border-border;
+    }
+    html {
+        scroll-behavior: auto;
+    }
+    body {
+        @apply bg-background text-foreground font-sans;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+    ::selection {
+        background: #d4a359;
+        color: #070907;
+    }
+    ::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+    }
+    ::-webkit-scrollbar-track {
+        background: #070907;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: #2d3b2d;
+        border: 2px solid #070907;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+        background: #d4a359;
+    }
+    :focus-visible {
+        outline: 2px solid #d4a359;
+        outline-offset: 2px;
+    }
+}
+
+@layer base {
+    [data-debug-wrapper="true"] {
+        display: contents !important;
+    }
+    [data-debug-wrapper="true"] > * {
+        margin: inherit;
+        padding: inherit;
+        gap: inherit;
+        border: inherit;
+    }
+}
+
+@layer utilities {
+    .font-display {
+        font-family: "Barlow Condensed", "Oswald", sans-serif;
+    }
+    .font-serif-ed {
+        font-family: "Playfair Display", Georgia, serif;
+    }
+    .tactical-grid {
+        background-image: linear-gradient(to right, #1b241b 1px, transparent 1px),
+            linear-gradient(to bottom, #1b241b 1px, transparent 1px);
+        background-size: 4rem 4rem;
+    }
+    .dot-matrix {
+        background-image: radial-gradient(#2d3b2d 1px, transparent 1px);
+        background-size: 14px 14px;
+    }
+    .scanlines {
+        background-image: repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 3px,
+            rgba(212, 163, 89, 0.025) 3px,
+            rgba(212, 163, 89, 0.025) 4px
+        );
+    }
+    .noise::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        opacity: 0.035;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+    .text-outline {
+        -webkit-text-stroke: 1px rgba(212, 163, 89, 0.35);
+        color: transparent;
+    }
+}
+
+@keyframes marquee-x {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(-50%);
+    }
+}
+.animate-marquee {
+    animation: marquee-x 60s linear infinite;
+}
+.marquee-mask {
+    mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+}
+
+@keyframes led-pulse {
+    0%,
+    100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.25;
+    }
+}
+.led-pulse {
+    animation: led-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes eq-bar {
+    0%,
+    100% {
+        transform: scaleY(0.3);
+    }
+    50% {
+        transform: scaleY(1);
+    }
+}
+.eq-bar {
+    transform-origin: bottom;
+    animation: eq-bar 0.9s ease-in-out infinite;
+}
+
+input[type="range"].player-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 3px;
+    background: #2d3b2d;
+    cursor: pointer;
+}
+input[type="range"].player-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 12px;
+    height: 12px;
+    background: #d4a359;
+    border: none;
+}
+input[type="range"].player-slider::-moz-range-thumb {
+    width: 12px;
+    height: 12px;
+    background: #d4a359;
+    border: none;
+    border-radius: 0;
+}
+
+html.lenis,
+html.lenis body {
+    height: auto;
+}
+.lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+}

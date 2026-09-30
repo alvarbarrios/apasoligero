@@ -1,0 +1,96 @@
+import { useEffect } from "react";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import Lenis from "lenis";
+import "@/App.css";
+import { PlayerProvider } from "@/context/PlayerContext";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import PlayerBar from "@/components/PlayerBar";
+import Home from "@/pages/Home";
+import Canciones from "@/pages/Canciones";
+import SectionIndex from "@/pages/SectionIndex";
+import Himnos from "@/pages/Himnos";
+import HimnosGroup from "@/pages/HimnosGroup";
+import SongDetail from "@/pages/SongDetail";
+import Corneta from "@/pages/Corneta";
+import Audios from "@/pages/Audios";
+import Lemas from "@/pages/Lemas";
+import LemasGroup from "@/pages/LemasGroup";
+import Internacional from "@/pages/Internacional";
+import Enlaces from "@/pages/Enlaces";
+import Libro from "@/pages/Libro";
+import Contacto from "@/pages/Contacto";
+import NotFound from "@/pages/NotFound";
+
+function ScrollManager() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    if (window.__lenis) window.__lenis.scrollTo(0, { immediate: true });
+    else window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+}
+
+function useLenis() {
+  useEffect(() => {
+    const lenis = new Lenis({ duration: 1.15, smoothWheel: true });
+    window.__lenis = lenis;
+    let raf;
+    const loop = (t) => {
+      lenis.raf(t);
+      raf = requestAnimationFrame(loop);
+    };
+    raf = requestAnimationFrame(loop);
+    return () => {
+      cancelAnimationFrame(raf);
+      lenis.destroy();
+      window.__lenis = null;
+    };
+  }, []);
+}
+
+function Shell() {
+  useLenis();
+  return (
+    <div className="App min-h-screen bg-obsidian text-parchment flex flex-col">
+      <ScrollManager />
+      <Header />
+      <main className="flex-1">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/canciones" element={<Canciones />} />
+          <Route path="/canciones/paso-ligero" element={<SectionIndex section="pasoligero" base="/canciones/paso-ligero" />} />
+          <Route path="/canciones/paso-ligero/:slug" element={<SongDetail section="pasoligero" base="/canciones/paso-ligero" crumb="Paso Ligero" />} />
+          <Route path="/canciones/otras" element={<SectionIndex section="otras" base="/canciones/otras" />} />
+          <Route path="/canciones/otras/:slug" element={<SongDetail section="otras" base="/canciones/otras" crumb="Otras Canciones" />} />
+          <Route path="/canciones/himnos" element={<Himnos />} />
+          <Route path="/canciones/himnos/:group" element={<HimnosGroup />} />
+          <Route path="/canciones/himnos/:group/:slug" element={<SongDetail section="himnos" crumb="Himnos" />} />
+          <Route path="/canciones/corneta" element={<Corneta />} />
+          <Route path="/canciones/internacional" element={<Internacional />} />
+          <Route path="/audios" element={<Audios />} />
+          <Route path="/lemas" element={<Lemas />} />
+          <Route path="/lemas/:group" element={<LemasGroup />} />
+          <Route path="/libro-de-visitas" element={<Libro />} />
+          <Route path="/enlaces" element={<Enlaces />} />
+          <Route path="/contacto" element={<Contacto />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </main>
+      <Footer />
+      <PlayerBar />
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <PlayerProvider>
+        <Shell />
+      </PlayerProvider>
+    </BrowserRouter>
+  );
+}
+
+export default App;
