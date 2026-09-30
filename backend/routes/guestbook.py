@@ -33,6 +33,8 @@ class Entry(BaseModel):
 def _rate_limited(ip: str) -> bool:
     now = time.time()
     hits = [t for t in _RATE.get(ip, []) if now - t < _WINDOW]
+    for k in [k for k, v in _RATE.items() if k != ip and all(now - t >= _WINDOW for t in v)]:
+        _RATE.pop(k, None)
     _RATE[ip] = hits
     if len(hits) >= _LIMIT:
         return True

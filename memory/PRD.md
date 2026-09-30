@@ -15,7 +15,8 @@ Redesign the user's existing Dreamweaver website as a complete modern website wh
 - Frontend-only React SPA (react-router-dom v7, framer-motion, lenis smooth scroll, Tailwind)
 - Content pipeline: /tmp/extract_content.py parses all 176 legacy .htm files (BeautifulSoup, cp1252) into /app/frontend/src/data/archive.json (145 song records, 9 himnos groups, 8 lemas groups, 34 bugle calls, 36 audio archive entries, static pages)
 - Media: /app/frontend/public/assets/audio (69 mp3; 5 WMA + 1 WAV converted via ffmpeg), /assets/img (16 original images/emblems)
-- Backend: untouched template (static site per user choice)
+- Backend: FastAPI + MongoDB — /app/backend/routes/contact.py (POST /api/contact → Emergent managed Resend email to CONTACT_TO_EMAIL, honeypot + 5/h/IP rate limit), /app/backend/routes/guestbook.py (GET/POST /api/guestbook, MongoDB `guestbook` collection, uuid ids, email never published, honeypot + 3/h/IP), /app/backend/services/email.py (playbook guardrail gate). Env: EMERGENT_EMAIL_KEY, EMAIL_FROM_NAME="A Paso Ligero .com", CONTACT_TO_EMAIL=dark_slmnk@hotmail.com (owner's public email from source site — change in .env if needed)
+- Tests: /app/backend/tests/test_api.py (pytest, 4 passing), /app/backend/tests/test_features.py (testing agent)
 - Design system: /app/design_guidelines.json (obsidian #070907, olive drab, brass #D4A359, Barlow Condensed/DM Sans/JetBrains Mono/Playfair Display)
 
 ## Implemented (2026-09-30)
@@ -27,9 +28,16 @@ Redesign the user's existing Dreamweaver website as a complete modern website wh
 - SVG bugle logo mark (also favicon), SEO meta in Spanish, per-page document.title, data-testids throughout, 404 page
 - Verified: home/section/detail/corneta/lemas/contacto/audios flows, audio playback triggers player bar, search filters, 375/768/1366 responsive
 
+## Implemented (2026-09-30, session 2)
+- Himnos: España card/group/fichas now use Spanish flag SVG (/assets/img/espana.svg) instead of bugle mark (user visual-edit request)
+- Real contact delivery: /contacto form POSTs to /api/contact → HTML email (dark tactical template) to owner inbox via Emergent Resend, Reply-To = visitor email; success panel + "Enviar otra transmisión"; mailto fallback preserved
+- Native Libro de Visitas: sign form (nombre, lugar, UCO, mensaje, email opcional) + paginated ledger of entries (10/page, numbered, date, Playfair message); legacy smartgb link preserved as "Libro histórico"
+- Player upgrade: canvas waveform visualizer (Web Audio AnalyserNode, brass = played portion) with invisible range overlay for seek; track queue (QueueButton "+" on Audios rows, Corneta toques, song fichas; "Reproducir todo" on Audios queues filtered list; queue panel with play/remove/clear; next button; auto-advance on ended; badge count); global sonner Toaster in App.js
+- Verified by testing agent (iteration_1.json): 100% backend + frontend, incl. 1 real email send + real guestbook signature, 375px responsive
+
 ## Backlog
-- P1: Replace mailto contact form with real delivery (Resend) if user wants
-- P1: Guestbook could be re-implemented natively (currently links to legacy external smartgb)
-- P2: Audio waveform visualizer in player bar; global audio search across all 69 files
+- P2: Admin moderation for guestbook (delete/hide entries) — currently no auth, entries publish immediately
+- P2: Global audio search across all 69 files
 - P2: Dark In Tampere blog content (present in the .rar) is a separate project — ask user if it should be included
 - P2: Lyrics print view / PDF songbook export
+- P3: Restrict CORS to site domain on deployment; remove legacy /api/status template routes
