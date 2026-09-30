@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
-import { Menu, X, Radio } from "lucide-react";
+import { Menu, X, Search } from "lucide-react";
 import CornetaMark from "./CornetaMark";
+import SearchDialog from "./SearchDialog";
 import { usePlayer } from "@/context/PlayerContext";
 
 const LINKS = [
@@ -17,9 +18,23 @@ const LINKS = [
 
 export default function Header() {
   const [open, setOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const { track, playing } = usePlayer();
+
+  useEffect(() => {
+    const onKey = (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        setSearchOpen((o) => !o);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
   return (
     <header className="sticky top-0 z-40 border-b border-olive-600/60 bg-obsidian/90 backdrop-blur-md" data-testid="site-header">
+      <SearchDialog open={searchOpen} onClose={() => setSearchOpen(false)} />
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
         <Link to="/" className="group flex items-center gap-3" data-testid="brand-link" onClick={() => setOpen(false)}>
           <CornetaMark size={36} />
@@ -50,6 +65,16 @@ export default function Header() {
           ))}
         </nav>
         <div className="flex items-center gap-3">
+          <button
+            onClick={() => setSearchOpen(true)}
+            aria-label="Buscar en el archivo"
+            data-testid="header-search-button"
+            className="group flex h-9 items-center gap-2 border border-olive-600 px-3 font-mono text-[10px] uppercase tracking-[0.2em] text-sage transition-colors hover:border-brass hover:text-brass"
+          >
+            <Search size={14} />
+            <span className="hidden md:inline">Buscar</span>
+            <kbd className="hidden border border-olive-600 px-1 py-px text-[9px] text-khaki group-hover:border-brass/50 lg:inline">⌘K</kbd>
+          </button>
           {track && (
             <div className="hidden items-center gap-2 border border-olive-600 bg-olive-950 px-3 py-1.5 md:flex" data-testid="nav-playing-pill">
               <span className={`h-1.5 w-1.5 ${playing ? "bg-green-500 led-pulse" : "bg-brass"}`} />

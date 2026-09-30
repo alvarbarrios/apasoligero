@@ -186,3 +186,27 @@ html.lenis body {
 .lenis.lenis-smooth {
     scroll-behavior: auto !important;
 }
+
+/* Hoja imprimible */
+@media print {
+    @page {
+        size: A4;
+        margin: 12mm;
+    }
+    body {
+        background: #fff !important;
+    }
+    .no-print {
+        display: none !important;
+    }
+    .print-root {
+        background: #fff !important;
+        min-height: 0 !important;
+    }
+    .print-sheet {
+        margin: 0 !important;
+        padding: 0 !important;
+        max-width: none !important;
+        box-shadow: none !important;
+    }
+}

@@ -21,7 +21,11 @@ import Internacional from "@/pages/Internacional";
 import Enlaces from "@/pages/Enlaces";
 import Libro from "@/pages/Libro";
 import Contacto from "@/pages/Contacto";
+import Firma from "@/pages/Firma";
+import Admin from "@/pages/Admin";
+import PrintSheet from "@/pages/PrintSheet";
 import NotFound from "@/pages/NotFound";
+import { AuthProvider } from "@/context/AuthContext";
 
 function ScrollManager() {
   const { pathname } = useLocation();
@@ -52,6 +56,16 @@ function useLenis() {
 
 function Shell() {
   useLenis();
+  const { pathname } = useLocation();
+  if (pathname.startsWith("/imprimir/")) {
+    return (
+      <Routes>
+        <Route path="/imprimir/himnos/:group/:slug" element={<PrintSheet />} />
+        <Route path="/imprimir/:section/:slug" element={<PrintSheet />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    );
+  }
   return (
     <div className="App min-h-screen bg-obsidian text-parchment flex flex-col">
       <ScrollManager />
@@ -73,8 +87,10 @@ function Shell() {
           <Route path="/lemas" element={<Lemas />} />
           <Route path="/lemas/:group" element={<LemasGroup />} />
           <Route path="/libro-de-visitas" element={<Libro />} />
+          <Route path="/libro-de-visitas/firma/:id" element={<Firma />} />
           <Route path="/enlaces" element={<Enlaces />} />
           <Route path="/contacto" element={<Contacto />} />
+          <Route path="/admin" element={<Admin />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
@@ -95,9 +111,11 @@ function Shell() {
 function App() {
   return (
     <BrowserRouter>
-      <PlayerProvider>
-        <Shell />
-      </PlayerProvider>
+      <AuthProvider>
+        <PlayerProvider>
+          <Shell />
+        </PlayerProvider>
+      </AuthProvider>
     </BrowserRouter>
   );
 }

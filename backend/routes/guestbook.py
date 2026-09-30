@@ -48,12 +48,21 @@ def _public(doc: dict) -> Entry:
 
 
 def make_router(db):
+    PUBLIC = {"hidden": {"$ne": True}}
+
     @router.get("")
     async def list_entries(page: int = Query(1, ge=1), size: int = Query(12, ge=1, le=50)):
-        total = await db.guestbook.count_documents({})
-        cursor = db.guestbook.find({}, {"_id": 0}).sort("created_at", -1).skip((page - 1) * size).limit(size)
+        total = await db.guestbook.count_documents(PUBLIC)
+        cursor = db.guestbook.find(PUBLIC, {"_id": 0}).sort("created_at", -1).skip((page - 1) * size).limit(size)
         docs = await cursor.to_list(size)
         return {"total": total, "page": page, "size": size, "items": [_public(d) for d in docs]}
+
+    @router.get("/{entry_id}")
+    async def get_entry(entry_id: str):
+        doc = await db.guestbook.find_one({"id": entry_id, **PUBLIC}, {"_id": 0})
+        if not doc:
+            raise HTTPException(status_code=404, detail="Firma no encontrada")
+        return _public(doc)
 
     @router.post("", status_code=201)
     async def create_entry(payload: EntryIn, request: Request):
@@ -69,6 +78,7 @@ def make_router(db):
             "uco": payload.uco.strip(),
             "mensaje": payload.mensaje.strip(),
             "email": str(payload.email) if payload.email else "",
+            "hidden": False,
             "created_at": datetime.now(timezone.utc).isoformat(),
         }
         await db.guestbook.insert_one(doc)

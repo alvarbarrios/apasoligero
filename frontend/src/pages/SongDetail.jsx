@@ -1,6 +1,6 @@
 import { Link, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowLeft, ArrowRight, Download, FileAudio, ChevronRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, Download, FileAudio, ChevronRight, Printer } from "lucide-react";
 import AudioButton from "@/components/AudioButton";
 import QueueButton from "@/components/QueueButton";
 import CornetaMark from "@/components/CornetaMark";
@@ -23,6 +23,7 @@ export default function SongDetail({ section, base, crumb }) {
   const prev = idx > 0 ? list[idx - 1] : null;
   const next = idx >= 0 && idx < list.length - 1 ? list[idx + 1] : null;
   const backTo = isHimno ? `/canciones/himnos/${group}` : base;
+  const printTo = isHimno ? `/imprimir/himnos/${group}/${slug}` : `/imprimir/${base.split("/").pop()}/${slug}`;
   const crumbs = isHimno
     ? [
         { to: "/", label: "Inicio" },
@@ -135,6 +136,17 @@ export default function SongDetail({ section, base, crumb }) {
                   </ul>
                 </div>
               )}
+              <div className="mt-5 border-t border-olive-600/60 pt-4">
+                <Link
+                  to={printTo}
+                  data-testid="song-print-link"
+                  className="group flex items-center justify-between gap-3 border border-olive-600 px-4 py-3 font-mono text-[10px] uppercase tracking-[0.25em] text-sage transition-colors hover:border-brass hover:text-brass"
+                >
+                  <span className="flex items-center gap-2"><Printer size={13} /> Hoja imprimible</span>
+                  <ArrowRight size={12} className="transition-transform group-hover:translate-x-1" />
+                </Link>
+                <p className="mt-2 font-mono text-[9px] uppercase tracking-[0.15em] text-khaki">Letra limpia en A4 · para cancioneros de unidad</p>
+              </div>
             </div>
           </div>
         </motion.aside>

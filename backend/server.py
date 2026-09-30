@@ -68,9 +68,13 @@ async def get_status_checks():
 
 from routes.contact import router as contact_router  # noqa: E402
 from routes.guestbook import make_router as make_guestbook_router  # noqa: E402
+from routes.admin import make_router as make_admin_router  # noqa: E402
+from routes.auth import router as auth_router, seed_admin  # noqa: E402
 
 api_router.include_router(contact_router)
 api_router.include_router(make_guestbook_router(db))
+api_router.include_router(make_admin_router(db))
+api_router.include_router(auth_router)
 
 # Include the router in the main app
 app.include_router(api_router)
@@ -93,6 +97,8 @@ logger = logging.getLogger(__name__)
 @app.on_event("startup")
 async def ensure_indexes():
     await db.guestbook.create_index("created_at")
+    await db.guestbook.create_index("id", unique=True)
+    await seed_admin(db)
 
 
 @app.on_event("shutdown")
