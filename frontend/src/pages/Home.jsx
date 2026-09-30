@@ -3,6 +3,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { ArrowRight, Download, Music, Disc3, Megaphone, Quote, ChevronRight } from "lucide-react";
 import Marquee from "@/components/Marquee";
+import LemaDelDia from "@/components/LemaDelDia";
 import Reveal from "@/components/Reveal";
 import AudioButton from "@/components/AudioButton";
 import useTitle from "@/hooks/useTitle";
@@ -184,6 +185,8 @@ export default function Home() {
       </section>
 
       <Marquee items={["Paso Ligero", "Himnos", "Toques de Corneta", "Lemas de Unidades", "Marchas Militares", "Cancionero del Soldado", "Guardia Civil", "La Legión", "Armada Española", "Ejército del Aire"]} />
+
+      <LemaDelDia />
 
       {/* SECTIONS BENTO */}
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24" data-testid="home-sections">

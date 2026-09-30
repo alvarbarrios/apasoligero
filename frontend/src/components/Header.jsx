@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { Menu, X, Search } from "lucide-react";
-import CornetaMark from "./CornetaMark";
 import SearchDialog from "./SearchDialog";
 import { usePlayer } from "@/context/PlayerContext";
 
@@ -37,7 +36,12 @@ export default function Header() {
       <SearchDialog open={searchOpen} onClose={() => setSearchOpen(false)} />
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
         <Link to="/" className="group flex items-center gap-3" data-testid="brand-link" onClick={() => setOpen(false)}>
-          <CornetaMark size={36} />
+          <img
+            src="/assets/img/logo-apl.png"
+            alt="A Paso Ligero — corneta y laurel"
+            className="h-11 w-11 object-contain transition-transform duration-300 group-hover:scale-105"
+            data-testid="brand-logo"
+          />
           <span className="leading-none">
             <span className="block font-display text-xl font-extrabold uppercase tracking-wide text-parchment group-hover:text-brass transition-colors">
               A Paso Ligero

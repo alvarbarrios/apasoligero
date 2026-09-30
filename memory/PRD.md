@@ -43,6 +43,11 @@ Redesign the user's existing Dreamweaver website as a complete modern website wh
 - Share signature: permalink /libro-de-visitas/firma/:id (GET /api/guestbook/{id}), compact share buttons on each entry (copy, WhatsApp, X, mail, native share) + share card on permalink page
 - Verified by testing agent (iteration_2.json): 100% backend + frontend; pytest /app/backend/tests/test_api.py 8 passing
 
+## Implemented (2026-09-30, session 4)
+- Lema del Día on home (below marquee): deterministic daily motto from the 101 lemas (day-of-year), with Latin translation, unit, emblem, link to group, "Otro lema" shuffle with clip-path reveal — /app/frontend/src/components/LemaDelDia.jsx
+- Custom brand logo (brass bugle + laurel + star, transparent PNG generated & cleaned): header, footer, favicon (/assets/img/logo-apl.png, /favicon-64.png). CornetaMark still used as neutral emblem in Himnos/SongDetail/PrintSheet
+- Official Escudo de España (Wikimedia SVG, /assets/img/escudo-espana.svg) now used for Himnos → España and Lemas → Varios (user visual-edit requests); espana.svg flag removed
+
 ## Backlog
 - P2: Dark In Tampere blog content (present in the .rar) is a separate project — ask user if it should be included
 - P2: Print whole section/group as a multi-page songbook (cancionero completo)

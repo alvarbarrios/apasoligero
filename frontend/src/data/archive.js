@@ -3,7 +3,7 @@ import data from "./archive.json";
 export default data;
 
 export const HIMNOS_META = {
-  espana: { short: "España", code: "ESP", emblem: "/assets/img/espana.svg" },
+  espana: { short: "España", code: "ESP", emblem: "/assets/img/escudo-espana.svg" },
   tierra: { short: "Ejército de Tierra", code: "ET", emblem: "/assets/img/et.png" },
   armada: { short: "Armada Española", code: "ARM", emblem: "/assets/img/ae.gif" },
   aire: { short: "Ejército del Aire", code: "EA", emblem: "/assets/img/ea.PNG" },
@@ -22,7 +22,7 @@ export const LEMAS_META = {
   lgcivil: { short: "Guardia Civil", code: "GC", emblem: "/assets/img/gc.gif" },
   lgreal: { short: "Guardia Real", code: "GR", emblem: "/assets/img/gr.png" },
   lume: { short: "UME", code: "UME", emblem: "/assets/img/ume.png" },
-  lvarios: { short: "Varios", code: "VAR", emblem: "/assets/img/varios.gif" },
+  lvarios: { short: "Varios", code: "VAR", emblem: "/assets/img/escudo-espana.svg" },
 };
 
 export const getHimnosGroup = (slug) => data.himnosGroups.find((g) => g.slug === slug);

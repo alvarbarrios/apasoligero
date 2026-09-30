@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import CornetaMark from "./CornetaMark";
 
 export default function Footer() {
   return (
@@ -7,7 +6,7 @@ export default function Footer() {
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-12 sm:px-6 md:grid-cols-3">
         <div>
           <div className="flex items-center gap-3">
-            <CornetaMark size={30} />
+            <img src="/assets/img/logo-apl.png" alt="" className="h-8 w-8 object-contain" data-testid="footer-logo" />
             <span className="font-display text-lg font-extrabold uppercase tracking-wide">A Paso Ligero .com</span>
           </div>
           <p className="mt-4 max-w-xs text-sm leading-relaxed text-sage">
