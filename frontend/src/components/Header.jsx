@@ -7,7 +7,6 @@ import { usePlayer } from "@/context/PlayerContext";
 const LINKS = [
   { to: "/", label: "Inicio", id: "inicio" },
   { to: "/canciones", label: "Canciones", id: "canciones" },
-  { to: "/canciones/himnos", label: "Himnos", id: "himnos" },
   { to: "/canciones/corneta", label: "Corneta", id: "corneta" },
   { to: "/audios", label: "Audios", id: "audios" },
   { to: "/lemas", label: "Lemas", id: "lemas" },
