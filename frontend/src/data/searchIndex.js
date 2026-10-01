@@ -26,10 +26,10 @@ const songSub = (key) => {
 const PAGES = [
   ["/", "Inicio", "Portada del archivo"],
   ["/canciones", "Canciones", "Índice de canciones"],
-  ["/canciones/paso-ligero", "Canciones de Paso Ligero", "38 canciones para correr"],
+  ["/canciones/paso-ligero", "Canciones de Paso Ligero", `${data.pasoligero.items.length} canciones para correr`],
   ["/canciones/himnos", "Himnos", "Himnos de los Ejércitos de España"],
   ["/canciones/corneta", "Toques de Corneta", "34 toques con su significado"],
-  ["/canciones/otras", "Otras Canciones", "25 canciones"],
+  ["/canciones/otras", "Otras Canciones", `${data.otras.items.length} canciones`],
   ["/canciones/internacional", "Internacional", "Músicas de otros ejércitos"],
   ["/audios", "Archivo de Audio", "Listado de archivos de audio"],
   ["/lemas", "Lemas de Unidades", "101 lemas con traducción"],

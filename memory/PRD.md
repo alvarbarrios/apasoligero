@@ -48,6 +48,10 @@ Redesign the user's existing Dreamweaver website as a complete modern website wh
 - Custom brand logo (brass bugle + laurel + star, transparent PNG generated & cleaned): header, footer, favicon (/assets/img/logo-apl.png, /favicon-64.png). CornetaMark still used as neutral emblem in Himnos/SongDetail/PrintSheet
 - Official Escudo de España (Wikimedia SVG, /assets/img/escudo-espana.svg) now used for Himnos → España and Lemas → Varios (user visual-edit requests); espana.svg flag removed
 
+## Implemented (2026-10-01)
+- Added 2 user-supplied songs to "Otras Canciones y Miscelánea" (Escuela Militar de Paracaidismo): "Si El Viento Sopla" (/canciones/otras/sielvientosopla) and "¿Quiénes Somos?" (/canciones/otras/quienessomos), with lyrics (stanzas from .txt), MP3s copied to /assets/audio/{sielvientosopla,quienessomos}.mp3, also listed in /audios. Counts now dynamic in search index (otras=27, audios=38). Header brand no longer wraps when player pill shows.
+- HOW TO ADD SONGS: edit /app/frontend/src/data/archive.json → songs["otras/<slug>"] {title, stanzas[[]], audios[{file,label}], notes, images, date} + otras.items[{slug,title}] (+ audios.items for the audio list); copy mp3 to /app/frontend/public/assets/audio/
+
 ## Backlog
 - P2: Dark In Tampere blog content (present in the .rar) is a separate project — ask user if it should be included
 - P2: Print whole section/group as a multi-page songbook (cancionero completo)

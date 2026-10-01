@@ -42,11 +42,11 @@ export default function Header() {
             className="h-11 w-11 object-contain transition-transform duration-300 group-hover:scale-105"
             data-testid="brand-logo"
           />
-          <span className="leading-none">
+          <span className="leading-none whitespace-nowrap">
             <span className="block font-display text-xl font-extrabold uppercase tracking-wide text-parchment group-hover:text-brass transition-colors">
               A Paso Ligero
             </span>
-            <span className="block font-mono text-[10px] uppercase tracking-[0.3em] text-khaki">
+            <span className="hidden font-mono text-[10px] uppercase tracking-[0.3em] text-khaki sm:block">
               .com · músicas militares
             </span>
           </span>
@@ -80,7 +80,7 @@ export default function Header() {
             <kbd className="hidden border border-olive-600 px-1 py-px text-[9px] text-khaki group-hover:border-brass/50 lg:inline">⌘K</kbd>
           </button>
           {track && (
-            <div className="hidden items-center gap-2 border border-olive-600 bg-olive-950 px-3 py-1.5 md:flex" data-testid="nav-playing-pill">
+            <div className="hidden items-center gap-2 border border-olive-600 bg-olive-950 px-3 py-1.5 xl:flex" data-testid="nav-playing-pill">
               <span className={`h-1.5 w-1.5 ${playing ? "bg-green-500 led-pulse" : "bg-brass"}`} />
               <span className="max-w-[140px] truncate font-mono text-[10px] uppercase tracking-widest text-sage">
                 {track.title}
