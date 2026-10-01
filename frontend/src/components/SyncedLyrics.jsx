@@ -39,6 +39,7 @@ export default function SyncedLyrics({ song }) {
 
   const jump = (si, li) => {
     if (!file) return;
+    if (track?.file === file && dur === 0) return; // metadata still loading — ignore instead of restarting
     if (!live) {
       play({ file, title: song.title, sub: "Letra sincronizada" });
       return;

@@ -7,7 +7,7 @@ import uuid
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Literal, Optional
-from fastapi import APIRouter, Depends, File, Form, HTTPException, Response, UploadFile
+from fastapi import APIRouter, Depends, File, Form, HTTPException, Request, Response, UploadFile
 from pydantic import BaseModel, Field
 
 from routes.auth import get_current_user
@@ -69,7 +69,7 @@ def make_routers(db):
         return [_public(d) for d in docs]
 
     @public.get("/{song_id}/audio")
-    async def stream_audio(song_id: str):
+    async def stream_audio(song_id: str, request: Request):
         song = await db.songs.find_one({"id": song_id, "is_deleted": False}, {"_id": 0})
         if not song or not song.get("file_id"):
             raise HTTPException(status_code=404, detail="Audio no encontrado")
@@ -82,7 +82,18 @@ def make_routers(db):
                 _audio_cache.clear()
             _audio_cache[rec["storage_path"]] = (data, rec.get("content_type") or ct)
         data, ct = _audio_cache[rec["storage_path"]]
-        return Response(content=data, media_type=ct, headers={"Cache-Control": "public, max-age=86400", "Accept-Ranges": "none"})
+        size = len(data)
+        headers = {"Cache-Control": "public, max-age=86400", "Accept-Ranges": "bytes"}
+        rng = request.headers.get("range")
+        m = re.fullmatch(r"bytes=(\d*)-(\d*)", rng or "")
+        if m and (m.group(1) or m.group(2)):
+            start = int(m.group(1)) if m.group(1) else max(0, size - int(m.group(2)))
+            end = min(int(m.group(2)), size - 1) if m.group(1) and m.group(2) else size - 1
+            if start >= size:
+                raise HTTPException(status_code=416, detail="Rango no satisfactorio", headers={"Content-Range": f"bytes */{size}"})
+            headers["Content-Range"] = f"bytes {start}-{end}/{size}"
+            return Response(content=data[start:end + 1], status_code=206, media_type=ct, headers=headers)
+        return Response(content=data, media_type=ct, headers=headers)
 
     # ---- chunked upload -------------------------------------------------
     @upload.post("/chunk")

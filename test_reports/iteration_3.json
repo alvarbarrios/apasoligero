@@ -1,0 +1,38 @@
+{
+  "summary": "Full e2e testing of the two new features: 'Subida de Canciones' (admin songs CRUD + chunked MP3 upload to Emergent object storage) and 'Letra Sincronizada' (synced lyrics on song page). Backend: 6/6 new pytest in tests/test_songs.py pass (public listing shape, admin auth guard on /api/admin/songs + /api/admin/upload/{chunk,complete}, himnos invalid-group → 422, non-audio extension → 400, /complete mismatched total → 400, and the full chunked-upload → song-create → public-list → audio-stream (size-exact match) → slug-collision → delete → audio-404 lifecycle). Pre-existing suite tests/test_api.py (9/9) still green. Frontend: admin login, default 'Canciones' tab, SongForm fills + chunked upload (song-audio-selected appears), submit creates row in songs-admin-list ('1 registros'), songs-admin-item-link navigates to /canciones/otras/<slug>, public song page renders song-lyrics + 'Audio disponible'. SyncedLyrics: idle status 'Pulse un verso para escuchar'; clicking a verse starts playback and global-player-bar becomes visible; after ~7s a p[data-testid=current-line] exists and a [data-testid^=stanza-][data-active] is set; synced-status flips to 'Sincronización estimada'; synced-follow-toggle flips aria-pressed true→false. Edit flow (songs-admin-edit-{id}) persists title change; delete flow (songs-admin-delete-{id} → confirm) removes from admin list AND from public /api/songs. Libro de Visitas tab still shows moderation-panel; admin-logout works. Regression: home, /canciones/otras/sielvientosopla still work. All created test data was cleaned up (GET /api/songs returns [] at end of run).",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [
+      {"flow": "Letra sincronizada — seek on later verse",
+       "issue": "While audio was playing (player-time-current=0:08), clicking the last verse (lines[-1]) with 4 lyric lines caused the time to drop to 0:01 instead of jumping forward (expected ~70% of duration ≈ 1:05 based on buildTimeline). Timeline computation looks correct in SyncedLyrics.jsx line 46-47 (seek(t.start)); likely cause is `live` being transiently false at click time (dur===0 edge case) which makes jump() fall into the `!live` branch and call play(...) from zero. Only reproduces on freshly-created songs — the static sielvientosopla seeks correctly in prior iterations. Low priority as all other sync behaviour (status, current-line, data-active stanza, follow toggle) works.",
+       "affected_selectors": ["[data-testid=player-time-current]", "p inside [data-testid=song-lyrics]"]}
+    ],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_songs.py",
+    "/app/backend/tests/test_api.py",
+    "/app/test_reports/pytest/songs_results.xml"
+  ],
+  "action_items": [
+    "Investigate SyncedLyrics.jump(): guard against dur===0 by waiting for metadata before falling back to play()-from-zero, so that a user clicking a later verse immediately after the global player bar appears actually seeks forward instead of restarting."
+  ],
+  "critical_code_review_comments": [
+    "routes/songs.py: _audio_cache is an in-process dict with crude 40-entry clear() eviction — fine for the small owner-only archive but note it does not survive restarts and offers no per-key TTL.",
+    "routes/songs.py: /admin/upload/chunk accepts any `upload_id` matching [a-f0-9-]{8,64} with no server-side session binding to the authed user. Any admin can resume another admin's upload. Low risk (single-owner site) but worth binding upload_id to user id in Mongo.",
+    "routes/songs.py: MAX_AUDIO is enforced via sum of on-disk parts in /tmp/apl_uploads — on a /tmp purge between chunk and complete the request returns 400 'Faltan fragmentos' instead of a cleaner 410/409 'upload expired'.",
+    "routes/songs.py: Streaming endpoint returns the entire body with `Accept-Ranges: none` — mobile Safari will refuse to scrub. Consider implementing byte-range support for better UX on long audios.",
+    "SyncedLyrics.jsx: buildTimeline estimation relies on Math.max(text.length, 14); very short/empty-line stanzas can shift timing significantly. Documenting as 'estimated' is fine for v1."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_songs.py (new)"
+  ],
+  "success_rate": {"backend": "100% (6/6 new + 9/9 regression)", "frontend": "95% (10/11 scripted assertions passed; seek-forward observation flagged)"},
+  "test_credentials": "autor@apasoligero.com / PasoLigero-2026! (per /app/memory/test_credentials.md)",
+  "seed_data_creation": "One song was created, edited, and deleted via the admin UI during the Playwright run (data-testid=songs-admin-item-{id}). Backend pytest created and deleted 2 additional songs via the API. GET /api/songs confirmed empty after cleanup.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "New data-testids verified: song-form, song-title-input, song-section-select, song-group-select, song-lyrics-input, song-notes-input, song-audio-input, song-audio-selected, song-audio-progress, song-audio-dropzone, song-audio-remove, song-form-submit, song-form-cancel, songs-admin, songs-admin-count, songs-admin-list, songs-admin-empty, songs-admin-item-{id}, songs-admin-item-link, songs-admin-edit-{id}, songs-admin-delete-{id}, songs-admin-delete-confirm-{id}, songs-admin-delete-cancel-{id}, admin-tab-songs, admin-tab-libro, synced-controls, synced-status, synced-follow-toggle, song-lyrics, stanza-{si}, current-line. Chunked upload endpoints: multipart form fields are upload_id (lowercase+hyphens, [a-f0-9-]{8,64}), index (int), chunk (file); /complete fields: upload_id, filename, total. Admin token lives in localStorage['apl_token'].",
+  "rca of the issue": "SyncedLyrics seek-backward observation — Hypothesis: In SyncedLyrics.jsx the `live` flag is `Boolean(file && track?.file === file && dur > 0)`. Immediately after the first click starts playback via play(...), the audio element metadata (and thus `dur`) may not yet be set when the test clicks the last verse; `live` is therefore false and jump() takes the `!live` branch calling play(...) again — which internally resets currentTime to 0 (hence the 0:01 reading). Mitigation: await loadedmetadata before considering the audio 'live', or in jump() when !live but file matches current track, call seek(estimatedStart) after the metadata-loaded promise instead of restarting. Not reproducible on static songs where dur is cached across visits."
+}

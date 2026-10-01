@@ -52,6 +52,13 @@ Redesign the user's existing Dreamweaver website as a complete modern website wh
 - Added 2 user-supplied songs to "Otras Canciones y Miscelánea" (Escuela Militar de Paracaidismo): "Si El Viento Sopla" (/canciones/otras/sielvientosopla) and "¿Quiénes Somos?" (/canciones/otras/quienessomos), with lyrics (stanzas from .txt), MP3s copied to /assets/audio/{sielvientosopla,quienessomos}.mp3, also listed in /audios. Counts now dynamic in search index (otras=27, audios=38). Header brand no longer wraps when player pill shows.
 - HOW TO ADD SONGS: edit /app/frontend/src/data/archive.json → songs["otras/<slug>"] {title, stanzas[[]], audios[{file,label}], notes, images, date} + otras.items[{slug,title}] (+ audios.items for the audio list); copy mp3 to /app/frontend/public/assets/audio/
 
+## Implemented (2026-10-01, session 5)
+- Song upload from admin panel (/admin → tab "Canciones"): SongForm (title, section pasoligero/otras/himnos+group, lyrics by blank-line stanzas, notes, audio ≤25MB via 1MB chunked upload → Emergent object storage), list with edit/delete. Backend /app/backend/routes/songs.py (+ services/storage.py): public GET /api/songs, GET /api/songs/{id}/audio (byte-range 206 support, in-memory cache), admin CRUD + /api/admin/upload/{chunk,complete}. Mongo collections: songs (soft delete), files. Env: EMERGENT_LLM_KEY (storage init at startup).
+- Frontend merge: ArchiveContext fetches /api/songs and mergeDynamicSongs() (archive.js) injects into section lists, song pages, /audios, search; Routes keyed by version to re-render. SongDetail shows loader until archive ready.
+- Synced lyrics (SyncedLyrics.jsx): estimated per-line timeline (proportional to line length, 5% intro), current line brass + past dim + active stanza border, "Seguir letra" auto-scroll via Lenis, click verse → seek (or start playback). Guard against dur===0.
+- Added 3 more static songs to Otras (EMP): Himno De Las Escuelas De Aviación, Blanca Rosa, Afrikakai (otras=30, audios=41).
+- Tests: iteration_3.json 100% backend / 95% frontend (seek edge fixed); pytest 22 passing (tests/test_api.py + tests/test_songs.py by testing agent)
+
 ## Backlog
 - P2: Dark In Tampere blog content (present in the .rar) is a separate project — ask user if it should be included
 - P2: Print whole section/group as a multi-page songbook (cancionero completo)
