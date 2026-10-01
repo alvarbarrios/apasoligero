@@ -1,20 +1,30 @@
 import { Link, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowLeft, ArrowRight, Download, FileAudio, ChevronRight, Printer } from "lucide-react";
+import { ArrowLeft, ArrowRight, Download, FileAudio, ChevronRight, Printer, Loader2 } from "lucide-react";
 import AudioButton from "@/components/AudioButton";
 import QueueButton from "@/components/QueueButton";
 import CornetaMark from "@/components/CornetaMark";
+import SyncedLyrics from "@/components/SyncedLyrics";
 import useTitle from "@/hooks/useTitle";
 import NotFound from "@/pages/NotFound";
+import { useArchive } from "@/context/ArchiveContext";
 import data, { HIMNOS_META, getHimnosGroup } from "@/data/archive";
 
 export default function SongDetail({ section, base, crumb }) {
   const { group, slug } = useParams();
+  const { ready } = useArchive();
   const isHimno = section === "himnos";
   const key = isHimno ? `himnos/${group}/${slug}` : `${section}/${slug}`;
   const song = data.songs[key];
   useTitle(song ? song.title : "Registro");
 
+  if (!song && !ready) {
+    return (
+      <p className="flex items-center justify-center gap-2 py-32 font-mono text-xs uppercase tracking-widest text-khaki" data-testid="song-loading">
+        <Loader2 size={14} className="animate-spin" /> Consultando el archivo…
+      </p>
+    );
+  }
   if (!song) return <NotFound />;
 
   const meta = isHimno ? HIMNOS_META[group] || {} : {};
@@ -158,18 +168,7 @@ export default function SongDetail({ section, base, crumb }) {
           transition={{ duration: 0.6, delay: 0.15 }}
           className="lg:col-span-8"
         >
-          <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-brass">Letra · Documento transcrito</p>
-          <div className="mt-6 space-y-8" data-testid="song-lyrics">
-            {song.stanzas.map((stanza, si) => (
-              <div key={si} className="border-l-2 border-olive-600 pl-5 transition-colors hover:border-brass/60">
-                {stanza.map((line, li) => (
-                  <p key={li} className="font-serif-ed text-lg italic leading-relaxed text-parchment/90 sm:text-xl">
-                    {line}
-                  </p>
-                ))}
-              </div>
-            ))}
-          </div>
+          <SyncedLyrics song={song} />
           <div className="mt-14 flex items-center justify-between gap-4 border-t border-olive-600/60 pt-6">
             {prev ? (
               <Link

@@ -39,6 +39,9 @@ const PAGES = [
 ];
 
 let INDEX = null;
+export const resetIndex = () => {
+  INDEX = null;
+};
 export function buildIndex() {
   if (INDEX) return INDEX;
   const items = [];

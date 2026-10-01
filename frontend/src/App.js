@@ -26,6 +26,7 @@ import Admin from "@/pages/Admin";
 import PrintSheet from "@/pages/PrintSheet";
 import NotFound from "@/pages/NotFound";
 import { AuthProvider } from "@/context/AuthContext";
+import { ArchiveProvider, useArchive } from "@/context/ArchiveContext";
 
 function ScrollManager() {
   const { pathname } = useLocation();
@@ -57,9 +58,10 @@ function useLenis() {
 function Shell() {
   useLenis();
   const { pathname } = useLocation();
+  const { version } = useArchive();
   if (pathname.startsWith("/imprimir/")) {
     return (
-      <Routes>
+      <Routes key={version}>
         <Route path="/imprimir/himnos/:group/:slug" element={<PrintSheet />} />
         <Route path="/imprimir/:section/:slug" element={<PrintSheet />} />
         <Route path="*" element={<NotFound />} />
@@ -71,7 +73,7 @@ function Shell() {
       <ScrollManager />
       <Header />
       <main className="flex-1">
-        <Routes>
+        <Routes key={version}>
           <Route path="/" element={<Home />} />
           <Route path="/canciones" element={<Canciones />} />
           <Route path="/canciones/paso-ligero" element={<SectionIndex section="pasoligero" base="/canciones/paso-ligero" />} />
@@ -112,9 +114,11 @@ function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <PlayerProvider>
-          <Shell />
-        </PlayerProvider>
+        <ArchiveProvider>
+          <PlayerProvider>
+            <Shell />
+          </PlayerProvider>
+        </ArchiveProvider>
       </AuthProvider>
     </BrowserRouter>
   );

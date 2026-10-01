@@ -70,11 +70,15 @@ from routes.contact import router as contact_router  # noqa: E402
 from routes.guestbook import make_router as make_guestbook_router  # noqa: E402
 from routes.admin import make_router as make_admin_router  # noqa: E402
 from routes.auth import router as auth_router, seed_admin  # noqa: E402
+from routes.songs import make_routers as make_song_routers  # noqa: E402
+from services.storage import init_storage  # noqa: E402
 
 api_router.include_router(contact_router)
 api_router.include_router(make_guestbook_router(db))
 api_router.include_router(make_admin_router(db))
 api_router.include_router(auth_router)
+for _r in make_song_routers(db):
+    api_router.include_router(_r)
 
 # Include the router in the main app
 app.include_router(api_router)
@@ -99,6 +103,13 @@ async def ensure_indexes():
     await db.guestbook.create_index("created_at")
     await db.guestbook.create_index("id", unique=True)
     await seed_admin(db)
+    await db.songs.create_index("id", unique=True)
+    await db.files.create_index("id", unique=True)
+    try:
+        await init_storage()
+        logger.info("Storage initialized")
+    except Exception as e:
+        logger.error("Storage init failed: %s", e)
 
 
 @app.on_event("shutdown")

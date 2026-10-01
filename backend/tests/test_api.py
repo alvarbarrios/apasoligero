@@ -86,6 +86,24 @@ def test_moderation_hide_share_delete(client, token):
     assert client.delete(f"/api/admin/guestbook/{eid}", headers=h).status_code == 404
 
 
+def test_songs_admin_crud_and_public_merge(client, token):
+    h = {"Authorization": f"Bearer {token}"}
+    assert client.get("/api/admin/songs").status_code == 401
+    assert client.post("/api/admin/upload/chunk", data={"upload_id": "x", "index": 0}).status_code == 401
+    bad = client.post("/api/admin/songs", json={"title": "Mal", "section": "himnos", "group": "nope", "lyrics": "letra letra"}, headers=h)
+    assert bad.status_code == 422
+    r = client.post("/api/admin/songs", json={"title": "Canción Pytest", "section": "otras", "lyrics": "Uno\ndos\n\nTres\ncuatro", "notes": "n1\nn2"}, headers=h)
+    assert r.status_code == 201, r.text
+    s = r.json()
+    assert s["slug"] == "cancionpytest" and s["stanzas"] == [["Uno", "dos"], ["Tres", "cuatro"]] and s["notes"] == ["n1", "n2"] and s["audio"] is None
+    assert any(x["id"] == s["id"] for x in client.get("/api/songs").json())
+    assert client.get(f"/api/songs/{s['id']}/audio").status_code == 404
+    upd = client.put(f"/api/admin/songs/{s['id']}", json={"title": "Canción Pytest 2", "section": "pasoligero", "lyrics": "Solo una", "notes": ""}, headers=h)
+    assert upd.status_code == 200 and upd.json()["section"] == "pasoligero"
+    assert client.delete(f"/api/admin/songs/{s['id']}", headers=h).json()["deleted"] is True
+    assert all(x["id"] != s["id"] for x in client.get("/api/songs").json())
+
+
 def test_admin_filter_shapes(client, token):
     h = {"Authorization": f"Bearer {token}"}
     # Create an entry with email so admin view exposes it

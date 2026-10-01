@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "sonner";
-import { Eye, EyeOff, Trash2, Loader2, LogOut, Mail, MapPin, Shield, ExternalLink } from "lucide-react";
+import { Eye, EyeOff, Trash2, Loader2, Mail, MapPin, Shield, ExternalLink } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuth, authHeaders } from "@/context/AuthContext";
 
@@ -14,7 +14,7 @@ const FILTERS = [
 const fmt = (iso) => new Date(iso).toLocaleString("es-ES", { dateStyle: "medium", timeStyle: "short" });
 
 export default function ModerationPanel() {
-  const { user, logout } = useAuth();
+  const { logout } = useAuth();
   const [filter, setFilter] = useState("all");
   const [res, setRes] = useState({ items: [], total: 0, hidden: 0 });
   const [loading, setLoading] = useState(true);
@@ -59,20 +59,15 @@ export default function ModerationPanel() {
   };
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6" data-testid="moderation-panel">
-      <div className="flex flex-wrap items-end justify-between gap-4 border-b border-olive-600/70 pb-5">
+    <div data-testid="moderation-panel">
+      <div className="flex flex-wrap items-end justify-between gap-4 border-b border-olive-600/70 pb-4">
         <div>
-          <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-brass">Puesto de mando · {user?.email}</p>
-          <h1 className="mt-1 font-display text-4xl font-extrabold uppercase tracking-tight text-parchment">Moderación del Libro</h1>
+          <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-brass">Firmas recibidas</p>
+          <h2 className="mt-1 font-display text-3xl font-extrabold uppercase tracking-tight text-parchment">Moderación del Libro</h2>
         </div>
-        <div className="flex items-center gap-3">
-          <Link to="/libro-de-visitas" className="flex items-center gap-1 font-mono text-[10px] uppercase tracking-[0.2em] text-sage hover:text-brass" data-testid="admin-view-public">
-            Ver libro público <ExternalLink size={11} />
-          </Link>
-          <button onClick={logout} data-testid="admin-logout" className="flex items-center gap-2 border border-olive-600 px-4 py-2 font-mono text-[10px] uppercase tracking-[0.2em] text-sage transition-colors hover:border-signal hover:text-signal">
-            <LogOut size={12} /> Salir
-          </button>
-        </div>
+        <Link to="/libro-de-visitas" className="flex items-center gap-1 font-mono text-[10px] uppercase tracking-[0.2em] text-sage hover:text-brass" data-testid="admin-view-public">
+          Ver libro público <ExternalLink size={11} />
+        </Link>
       </div>
 
       <div className="mt-6 flex flex-wrap items-center justify-between gap-4">
