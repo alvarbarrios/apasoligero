@@ -59,6 +59,12 @@ Redesign the user's existing Dreamweaver website as a complete modern website wh
 - Added 3 more static songs to Otras (EMP): Himno De Las Escuelas De Aviación, Blanca Rosa, Afrikakai (otras=30, audios=41).
 - Tests: iteration_3.json 100% backend / 95% frontend (seek edge fixed); pytest 22 passing (tests/test_api.py + tests/test_songs.py by testing agent)
 
+## Implemented (2026-10-01, session 6)
+- Cornetín subsection: /canciones/corneta/cornetin (Corneta.jsx now takes variant prop; tabs Corneta/Cornetín; "Reproducir todo"). data.cornetin.calls = 33 toques with names/descriptions derived from filenames. **AUDIO PENDING**: every .mp3 in the user's cornetin.rar was actually a Yahoo! GeoCities "site not found" HTML page (12 KB each), so all 33 have file:null ("Sin audio"). To add real audio: copy mp3s to /app/frontend/public/assets/audio/cornetin/<slug>.mp3 and set file in archive.json.
+- Lema compartible: "Compartir" button in LemaDelDia → LemaShareDialog renders a PNG card via canvas (/app/frontend/src/lib/lemaCard.js; square 1080² for WhatsApp, wide 1200×675 for X), download, Web Share API with file, WhatsApp/X text links.
+- Nav: added "Libro de Visitas" link; desktop nav now shows from xl (1280) with nowrap links; search button icon-only between xl and 2xl.
+- Himnos España → bandera-espana.svg (flag); Himnos Varios & Lemas Varios → escudo-espana.svg (user edits).
+
 ## Backlog
 - P2: Dark In Tampere blog content (present in the .rar) is a separate project — ask user if it should be included
 - P2: Print whole section/group as a multi-page songbook (cancionero completo)

@@ -8,7 +8,7 @@ import data from "@/data/archive";
 const SECTIONS = [
   { n: "01", title: "Paso Ligero", to: "/canciones/paso-ligero", img: "/assets/img/pasoligero.JPG", desc: data.pasoligero.intro.join(" "), count: `${data.pasoligero.items.length} canciones`, id: "pasoligero" },
   { n: "02", title: "Himnos", to: "/canciones/himnos", img: "/assets/img/himnos.JPG", desc: "Un himno es una canción que representa a algo. Letras y sonidos de los distintos Ejércitos de España.", count: `${data.himnosGroups.reduce((a, g) => a + g.items.length, 0)} himnos`, id: "himnos" },
-  { n: "03", title: "Toques de Corneta", to: "/canciones/corneta", img: "/assets/img/corneta.jpg", desc: data.corneta.intro[0], count: `${data.corneta.calls.length} toques`, id: "corneta" },
+  { n: "03", title: "Toques de Corneta", to: "/canciones/corneta", img: "/assets/img/corneta.jpg", desc: data.corneta.intro[0], count: `${data.corneta.calls.length} toques · ${data.cornetin.calls.length} de cornetín`, id: "corneta" },
   { n: "04", title: "Otras Canciones y Miscelánea", to: "/canciones/otras", img: "/assets/img/otras.JPG", desc: data.otras.intro[0], count: `${data.otras.items.length} canciones`, id: "otras" },
   { n: "05", title: "Cancionero Internacional", to: "/canciones/internacional", img: "/assets/img/internacional.jpg", desc: "Sección donde iré incluyendo distintas canciones de otros Ejércitos aportadas por distintos colaboradores.", count: "Próximamente", id: "internacional" },
 ];

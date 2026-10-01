@@ -1,8 +1,9 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Quote, Shuffle, ArrowRight, Languages } from "lucide-react";
+import { Quote, Shuffle, ArrowRight, Languages, Share2 } from "lucide-react";
 import Reveal from "@/components/Reveal";
+import LemaShareDialog from "@/components/LemaShareDialog";
 import data, { LEMAS_META } from "@/data/archive";
 
 const ALL = data.lemasGroups.flatMap((g) => g.entries.map((e) => ({ ...e, group: g.slug })));
@@ -18,11 +19,17 @@ const fmtDay = new Date().toLocaleDateString("es-ES", { weekday: "long", day: "n
 export default function LemaDelDia() {
   const base = useMemo(() => dayIndex() % ALL.length, []);
   const [offset, setOffset] = useState(0);
+  const [shareOpen, setShareOpen] = useState(false);
   const lema = ALL[(base + offset) % ALL.length];
   const meta = LEMAS_META[lema.group] || {};
 
   return (
     <section className="border-y border-olive-600/60 bg-olive-950" data-testid="lema-del-dia">
+      <LemaShareDialog
+        open={shareOpen}
+        onClose={() => setShareOpen(false)}
+        lema={{ motto: lema.motto, translation: lema.translation, unit: lema.unit, groupShort: meta.short, emblem: meta.emblem, dateLabel: fmtDay }}
+      />
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-16 sm:px-6 sm:py-20 lg:grid-cols-12 lg:items-center">
         <Reveal className="lg:col-span-3">
           <p className="font-mono text-xs uppercase tracking-[0.3em] text-brass" data-testid="lema-eyebrow">Lema del día</p>
@@ -37,6 +44,13 @@ export default function LemaDelDia() {
               className="flex items-center gap-2 border border-olive-500 px-4 py-2 font-mono text-[11px] uppercase tracking-[0.2em] text-sage transition-colors hover:border-brass hover:text-brass"
             >
               <Shuffle size={12} /> Otro lema
+            </button>
+            <button
+              onClick={() => setShareOpen(true)}
+              data-testid="lema-compartir"
+              className="flex items-center gap-2 border border-olive-500 px-4 py-2 font-mono text-[11px] uppercase tracking-[0.2em] text-sage transition-colors hover:border-brass hover:text-brass"
+            >
+              <Share2 size={12} /> Compartir
             </button>
             <Link
               to="/lemas"

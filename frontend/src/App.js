@@ -84,6 +84,7 @@ function Shell() {
           <Route path="/canciones/himnos/:group" element={<HimnosGroup />} />
           <Route path="/canciones/himnos/:group/:slug" element={<SongDetail section="himnos" crumb="Himnos" />} />
           <Route path="/canciones/corneta" element={<Corneta />} />
+          <Route path="/canciones/corneta/cornetin" element={<Corneta variant="cornetin" />} />
           <Route path="/canciones/internacional" element={<Internacional />} />
           <Route path="/audios" element={<Audios />} />
           <Route path="/lemas" element={<Lemas />} />

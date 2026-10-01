@@ -3,7 +3,7 @@ import data from "./archive.json";
 export default data;
 
 export const HIMNOS_META = {
-  espana: { short: "España", code: "ESP", emblem: "/assets/img/escudo-espana.svg" },
+  espana: { short: "España", code: "ESP", emblem: "/assets/img/bandera-espana.svg" },
   tierra: { short: "Ejército de Tierra", code: "ET", emblem: "/assets/img/et.png" },
   armada: { short: "Armada Española", code: "ARM", emblem: "/assets/img/ae.gif" },
   aire: { short: "Ejército del Aire", code: "EA", emblem: "/assets/img/ea.PNG" },
@@ -11,7 +11,7 @@ export const HIMNOS_META = {
   gcivil: { short: "Guardia Civil", code: "GC", emblem: "/assets/img/gc.gif" },
   greal: { short: "Guardia Real", code: "GR", emblem: "/assets/img/gr.png" },
   ume: { short: "Unidad Militar de Emergencias", code: "UME", emblem: "/assets/img/ume.png" },
-  varios: { short: "Varios", code: "VAR", emblem: "/assets/img/varios.gif" },
+  varios: { short: "Varios", code: "VAR", emblem: "/assets/img/escudo-espana.svg" },
 };
 
 export const LEMAS_META = {
@@ -32,7 +32,7 @@ export const getSong = (key) => data.songs[key];
 export const STATS = {
   get canciones() { return Object.keys(data.songs).length; },
   get toques() { return data.corneta.calls.length; },
-  get audios() { return data.audios.items.length + data.corneta.calls.filter((c) => c.file).length; },
+  get audios() { return data.audios.items.length + data.corneta.calls.filter((c) => c.file).length + data.cornetin.calls.filter((c) => c.file).length; },
   get lemas() { return data.lemasGroups.reduce((n, g) => n + g.entries.length, 0); },
 };
 

@@ -12,6 +12,7 @@ const LINKS = [
   { to: "/audios", label: "Audios", id: "audios" },
   { to: "/lemas", label: "Lemas", id: "lemas" },
   { to: "/enlaces", label: "Enlaces", id: "enlaces" },
+  { to: "/libro-de-visitas", label: "Libro de Visitas", id: "libro" },
   { to: "/contacto", label: "Contacto", id: "contacto" },
 ];
 
@@ -51,7 +52,7 @@ export default function Header() {
             </span>
           </span>
         </Link>
-        <nav className="hidden items-center gap-5 lg:flex" data-testid="main-nav">
+        <nav className="hidden items-center gap-4 xl:flex 2xl:gap-5" data-testid="main-nav">
           {LINKS.map((l) => (
             <NavLink
               key={l.id}
@@ -59,7 +60,7 @@ export default function Header() {
               end={l.to === "/"}
               data-testid={`nav-link-${l.id}`}
               className={({ isActive }) =>
-                `relative font-mono text-[11px] uppercase tracking-[0.18em] transition-colors after:absolute after:-bottom-1 after:left-0 after:h-px after:bg-brass after:transition-all after:duration-300 ${
+                `relative whitespace-nowrap font-mono text-[11px] uppercase tracking-[0.18em] transition-colors after:absolute after:-bottom-1 after:left-0 after:h-px after:bg-brass after:transition-all after:duration-300 ${
                   isActive ? "text-brass after:w-full" : "text-sage hover:text-parchment after:w-0 hover:after:w-full"
                 }`
               }
@@ -76,8 +77,8 @@ export default function Header() {
             className="group flex h-9 items-center gap-2 border border-olive-600 px-3 font-mono text-[10px] uppercase tracking-[0.2em] text-sage transition-colors hover:border-brass hover:text-brass"
           >
             <Search size={14} />
-            <span className="hidden md:inline">Buscar</span>
-            <kbd className="hidden border border-olive-600 px-1 py-px text-[9px] text-khaki group-hover:border-brass/50 lg:inline">⌘K</kbd>
+            <span className="hidden md:inline xl:hidden 2xl:inline">Buscar</span>
+            <kbd className="hidden border border-olive-600 px-1 py-px text-[9px] text-khaki group-hover:border-brass/50 lg:inline xl:hidden 2xl:inline">⌘K</kbd>
           </button>
           {track && (
             <div className="hidden items-center gap-2 border border-olive-600 bg-olive-950 px-3 py-1.5 xl:flex" data-testid="nav-playing-pill">
@@ -95,7 +96,7 @@ export default function Header() {
             ¡Aporten!
           </Link>
           <button
-            className="text-parchment lg:hidden"
+            className="text-parchment xl:hidden"
             onClick={() => setOpen(!open)}
             aria-label="Abrir menú"
             data-testid="mobile-menu-toggle"
@@ -105,7 +106,7 @@ export default function Header() {
         </div>
       </div>
       {open && (
-        <nav className="border-t border-olive-600/60 bg-olive-950 px-4 py-4 lg:hidden" data-testid="mobile-nav">
+        <nav className="border-t border-olive-600/60 bg-olive-950 px-4 py-4 xl:hidden" data-testid="mobile-nav">
           <div className="grid gap-1">
             {LINKS.map((l, i) => (
               <NavLink

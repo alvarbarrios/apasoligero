@@ -29,6 +29,7 @@ const PAGES = [
   ["/canciones/paso-ligero", "Canciones de Paso Ligero", `${data.pasoligero.items.length} canciones para correr`],
   ["/canciones/himnos", "Himnos", "Himnos de los Ejércitos de España"],
   ["/canciones/corneta", "Toques de Corneta", "34 toques con su significado"],
+  ["/canciones/corneta/cornetin", "Toques de Cornetín", "Voces de mando del orden cerrado"],
   ["/canciones/otras", "Otras Canciones", `${data.otras.items.length} canciones`],
   ["/canciones/internacional", "Internacional", "Músicas de otros ejércitos"],
   ["/audios", "Archivo de Audio", "Listado de archivos de audio"],
@@ -76,6 +77,10 @@ export function buildIndex() {
   for (const c of data.corneta.calls) {
     if (!c.file) continue;
     items.push({ type: "audio", id: `toque-${c.file}`, title: `Toque de ${c.name}`, sub: "Toques de Corneta", file: c.file, to: "/canciones/corneta", n: norm(c.name), body: norm(`toque corneta ${c.desc}`) });
+  }
+  for (const c of data.cornetin.calls) {
+    if (!c.file) continue;
+    items.push({ type: "audio", id: `cornetin-${c.file}`, title: `Toque de ${c.name}`, sub: "Toques de Cornetín", file: c.file, to: "/canciones/corneta/cornetin", n: norm(c.name), body: norm(`toque cornetin ${c.desc}`) });
   }
   for (const [to, title, sub] of PAGES) {
     items.push({ type: "pagina", id: `page-${to}`, title, sub, to, n: norm(title), body: norm(sub) });
