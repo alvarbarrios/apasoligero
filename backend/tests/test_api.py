@@ -5,6 +5,7 @@ import pytest
 import httpx
 
 BASE = os.environ.get("TEST_API_URL", "http://localhost:8001").rstrip("/")
+ADMIN = {"email": os.environ.get("ADMIN_EMAIL", "autor@apasoligero.com"), "password": os.environ.get("ADMIN_PASSWORD", "PasoLigero-2026!")}
 
 
 @pytest.fixture(scope="module")
@@ -21,6 +22,8 @@ def test_guestbook_create_and_list(client):
     assert body["nombre"] == name and "email" not in body and "_id" not in body
     lst = client.get("/api/guestbook", params={"page": 1, "size": 5}).json()
     assert lst["total"] >= 1 and any(i["id"] == body["id"] for i in lst["items"])
+    tok = client.post("/api/auth/login", json=ADMIN).json()["access_token"]
+    assert client.delete(f"/api/admin/guestbook/{body['id']}", headers={"Authorization": f"Bearer {tok}"}).status_code == 200
 
 
 def test_guestbook_validation(client):
@@ -42,7 +45,6 @@ def test_contact_honeypot_silently_ok(client):
     assert r.status_code == 200 and r.json()["status"] == "ok" and "id" not in r.json()
 
 
-ADMIN = {"email": os.environ.get("ADMIN_EMAIL", "autor@apasoligero.com"), "password": os.environ.get("ADMIN_PASSWORD", "PasoLigero-2026!")}
 
 
 @pytest.fixture(scope="module")

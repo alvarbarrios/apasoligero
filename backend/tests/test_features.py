@@ -41,6 +41,10 @@ def test_guestbook_create_then_list_newest_first(client):
 
     lst = client.get("/api/guestbook", params={"page": 1, "size": 5}).json()
     assert lst["items"][0]["id"] == body["id"], "newest first ordering broken"
+    # clean up so test signatures never pollute the real guestbook
+    tok = client.post("/api/auth/login", json={"email": os.environ.get("ADMIN_EMAIL", "autor@apasoligero.com"),
+                                               "password": os.environ.get("ADMIN_PASSWORD", "PasoLigero-2026!")}).json()["access_token"]
+    assert client.delete(f"/api/admin/guestbook/{body['id']}", headers={"Authorization": f"Bearer {tok}"}).status_code == 200
 
 
 def test_guestbook_validation_short_fields(client):
